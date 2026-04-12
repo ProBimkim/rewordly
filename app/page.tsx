@@ -24,22 +24,30 @@ export default function Home() {
     <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e8f0", fontFamily: "sans-serif" }}>
 
       {/* Navbar */}
-      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/logo-icon.png" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8, objectFit: "contain" }} />
-          <span style={{ fontWeight: 700, fontSize: 18, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
+      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "12px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <img
+            src="/logo-icon.png"
+            alt="RewordlyAI"
+            style={{ width: 56, height: 56, borderRadius: 10, objectFit: "contain", background: "transparent" }}
+          />
+          <span style={{ fontWeight: 800, fontSize: 22, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            RewordlyAI
+          </span>
         </div>
         <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
-          <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none" }}>Home</Link>
+          <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none", fontWeight: 600 }}>Home</Link>
           <Link href="/ai-rewriter" style={{ color: "#6b6b8a", textDecoration: "none" }}>Tools</Link>
         </div>
       </nav>
 
-      {/* Hero — tanpa logo gambar */}
+      {/* Hero */}
       <div style={{ textAlign: "center", padding: "70px 20px 50px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
         <h1 style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 16, lineHeight: 1.1 }}>
           AI Writing Tools for{" "}
-          <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Everyone</span>
+          <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Everyone
+          </span>
         </h1>
         <p style={{ color: "#6b6b8a", fontSize: 17, maxWidth: 500, margin: "0 auto 32px", lineHeight: 1.6 }}>
           Free AI tools for students, creators, and SEO writers. Rewrite, summarize, check grammar, and more — instantly.
@@ -112,7 +120,7 @@ export default function Home() {
       {/* Footer */}
       <footer style={{ borderTop: "1px solid #1e1e2e", padding: "24px 20px", textAlign: "center" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 8 }}>
-          <img src="/logo-icon.png" alt="RewordlyAI" width={20} height={20} style={{ borderRadius: 4, objectFit: "contain" }} />
+          <img src="/logo-icon.png" alt="RewordlyAI" style={{ width: 24, height: 24, borderRadius: 4, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 14 }}>RewordlyAI</span>
         </div>
         <p style={{ color: "#3a3a52", fontSize: 12, fontFamily: "monospace" }}>© {new Date().getFullYear()} bimkim · All rights reserved</p>
