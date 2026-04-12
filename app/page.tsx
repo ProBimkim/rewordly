@@ -1,253 +1,148 @@
 "use client";
+import Image from "next/image";
+import Link from "next/link";
 
-import { useState } from "react";
-
-const MODES = [
-  { id: "simple", label: "Simple", icon: "◎", desc: "Clear & easy to read", color: "#4ade80" },
-  { id: "formal", label: "Formal", icon: "◈", desc: "Professional & polished", color: "#60a5fa" },
-  { id: "natural", label: "Natural", icon: "◉", desc: "Conversational & warm", color: "#f59e0b" },
-  { id: "creative", label: "Creative", icon: "◇", desc: "Vivid & expressive", color: "#a78bfa" },
+const TOOLS = [
+  { icon: "✦", label: "AI Rewriter", desc: "Rewrite any text in 4 tones", href: "/ai-rewriter", color: "#7c6aff", hot: true },
+  { icon: "✍️", label: "AI Blog Writer", desc: "Generate SEO blog posts instantly", href: "/ai-blog-writer", color: "#f59e0b", hot: true },
+  { icon: "🤖", label: "AI Humanizer", desc: "Make AI text sound human", href: "/ai-humanizer", color: "#4ade80" },
+  { icon: "✅", label: "Grammar Checker", desc: "Fix grammar and spelling errors", href: "/grammar-checker", color: "#60a5fa" },
+  { icon: "⚡", label: "Sentence Improver", desc: "Improve any sentence instantly", href: "/sentence-improver", color: "#f472b6" },
+  { icon: "📝", label: "Summarizer", desc: "Summarize long text in seconds", href: "/summarizer", color: "#34d399" },
+  { icon: "📧", label: "Email Generator", desc: "Write professional emails fast", href: "/email-generator", color: "#fb923c" },
+  { icon: "📣", label: "Marketing Copy", desc: "Generate converting ad copy", href: "/marketing-copy", color: "#a78bfa" },
+  { icon: "🛍️", label: "Product Description", desc: "Write compelling product copy", href: "/product-description", color: "#f87171" },
 ];
 
-type HistoryItem = {
-  id: number;
-  mode: string;
-  input: string;
-  output: string;
-  time: string;
-};
+const BLOGS = [
+  { title: "Best AI Writing Tools in 2026", desc: "Discover the top AI tools that are changing how people write online.", href: "/blog/best-ai-writing-tools-2026" },
+  { title: "How to Rewrite Text with AI", desc: "A complete guide to using AI paraphrasing tools effectively.", href: "/blog/how-to-rewrite-text-with-ai" },
+  { title: "SEO Writing Guide for Beginners", desc: "Learn how to write content that ranks on Google in 2026.", href: "/blog/seo-writing-guide" },
+];
 
 export default function Home() {
-  const [inputText, setInputText] = useState("");
-  const [outputText, setOutputText] = useState("");
-  const [variants, setVariants] = useState<string[]>([]);
-  const [selectedVariant, setSelectedVariant] = useState(0);
-  const [selectedMode, setSelectedMode] = useState("natural");
-  const [loading, setLoading] = useState(false);
-  const [loadingVariants, setLoadingVariants] = useState(false);
-  const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [charCount, setCharCount] = useState(0);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
-
-  const activeMode = MODES.find((m) => m.id === selectedMode)!;
-
-  const addToHistory = (input: string, output: string, mode: string) => {
-    const item: HistoryItem = {
-      id: Date.now(),
-      mode,
-      input: input.slice(0, 80) + (input.length > 80 ? "…" : ""),
-      output: output.slice(0, 80) + (output.length > 80 ? "…" : ""),
-      time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
-    };
-    setHistory(prev => [item, ...prev].slice(0, 20));
-  };
-
-  const handleRewrite = async () => {
-    if (!inputText.trim()) return;
-    setLoading(true);
-    setError("");
-    setOutputText("");
-    setVariants([]);
-
-    try {
-      const res = await fetch("/api/rewrite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText, mode: selectedMode }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong");
-      setOutputText(data.result);
-      addToHistory(inputText, data.result, selectedMode);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVariants = async () => {
-    if (!inputText.trim()) return;
-    setLoadingVariants(true);
-    setError("");
-    setOutputText("");
-    setVariants([]);
-    setSelectedVariant(0);
-
-    try {
-      const res = await fetch("/api/rewrite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText, mode: selectedMode, variants: true }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong");
-      setVariants(data.variants);
-      setOutputText(data.variants[0]);
-      addToHistory(inputText, data.variants[0], selectedMode);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoadingVariants(false);
-    }
-  };
-
-  const handleCopy = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleHistoryClick = (item: HistoryItem) => {
-    setInputText(item.input.replace("…", ""));
-    setOutputText(item.output.replace("…", ""));
-    setSelectedMode(item.mode);
-    setShowHistory(false);
-  };
-
-  const isLoading = loading || loadingVariants;
-
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e8f0", fontFamily: "sans-serif" }}>
 
-      {/* Header */}
-      <header style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(12px)", zIndex: 50 }}>
+      {/* Navbar */}
+      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: "linear-gradient(135deg, #7c6aff, #a78bfa)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>✦</div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 15 }}>Rewordly</div>
-            <div style={{ fontSize: 10, color: "#6b6b8a", letterSpacing: "0.08em", textTransform: "uppercase" }}>AI Text Rewriter</div>
-          </div>
+          <Image src="/logo-icon.png" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8 }} />
+          <span style={{ fontWeight: 700, fontSize: 18, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
         </div>
-        <button onClick={() => setShowHistory(!showHistory)}
-          style={{ background: showHistory ? "rgba(124,106,255,0.15)" : "none", border: "1px solid #1e1e2e", color: showHistory ? "#a78bfa" : "#6b6b8a", borderRadius: 8, padding: "6px 14px", fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
-          🕐 History {history.length > 0 && `(${history.length})`}
-        </button>
-      </header>
-
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 20px" }}>
-
-        {/* History Panel */}
-        {showHistory && (
-          <div style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, marginBottom: 20, overflow: "hidden" }}>
-            <div style={{ padding: "12px 16px", borderBottom: "1px solid #1e1e2e", fontSize: 12, color: "#6b6b8a", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span>Recent Rewrites</span>
-              {history.length > 0 && (
-                <button onClick={() => setHistory([])} style={{ background: "none", border: "none", color: "#f87171", fontSize: 11, cursor: "pointer" }}>Clear all</button>
-              )}
-            </div>
-            {history.length === 0 ? (
-              <div style={{ padding: 20, textAlign: "center", color: "#3a3a52", fontSize: 13 }}>No history yet</div>
-            ) : (
-              history.map((item) => {
-                const mode = MODES.find(m => m.id === item.mode);
-                return (
-                  <div key={item.id} onClick={() => handleHistoryClick(item)}
-                    style={{ padding: "12px 16px", borderBottom: "1px solid #1a1a28", cursor: "pointer", transition: "background 0.15s" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "#16161f")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                      <span style={{ fontSize: 11, color: mode?.color || "#6b6b8a", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>{mode?.icon} {item.mode}</span>
-                      <span style={{ fontSize: 11, color: "#3a3a52" }}>{item.time}</span>
-                    </div>
-                    <div style={{ fontSize: 12, color: "#6b6b8a", marginBottom: 2 }}>In: {item.input}</div>
-                    <div style={{ fontSize: 12, color: "#e8e8f0" }}>Out: {item.output}</div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        )}
-
-        {/* Hero */}
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <h1 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 8 }}>
-            Rewrite any text,{" "}
-            <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>instantly.</span>
-          </h1>
-          <p style={{ color: "#6b6b8a", fontSize: 15 }}>Paste your text, choose a tone, get a polished rewrite.</p>
+        <div style={{ display: "flex", gap: 24, fontSize: 14, color: "#6b6b8a" }}>
+          <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none" }}>Home</Link>
+          <Link href="/ai-rewriter" style={{ color: "#6b6b8a", textDecoration: "none" }}>Tools</Link>
+          <Link href="/blog/best-ai-writing-tools-2026" style={{ color: "#6b6b8a", textDecoration: "none" }}>Blog</Link>
         </div>
+      </nav>
 
-        {/* Mode Selector */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 14 }}>
-          {MODES.map((mode) => (
-            <button key={mode.id} onClick={() => setSelectedMode(mode.id)}
-              style={{ padding: "12px", borderRadius: 10, cursor: "pointer", textAlign: "left", border: `2px solid ${selectedMode === mode.id ? mode.color : "#1e1e2e"}`, background: selectedMode === mode.id ? `rgba(255,255,255,0.04)` : "#111118", color: "#e8e8f0", transition: "all 0.2s" }}>
-              <div style={{ fontSize: 18, color: selectedMode === mode.id ? mode.color : "#3a3a52" }}>{mode.icon}</div>
-              <div style={{ fontWeight: 600, fontSize: 13, marginTop: 4, color: selectedMode === mode.id ? mode.color : "#e8e8f0" }}>{mode.label}</div>
-              <div style={{ fontSize: 11, color: "#6b6b8a", marginTop: 2 }}>{mode.desc}</div>
-            </button>
-          ))}
-        </div>
+      {/* Hero */}
+      <div style={{ textAlign: "center", padding: "80px 20px 60px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
+        <Image src="/logo.png" alt="RewordlyAI" width={200} height={60} style={{ marginBottom: 24, objectFit: "contain" }} />
+        <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 16, lineHeight: 1.1 }}>
+          AI Writing Tools for{" "}
+          <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            Everyone
+          </span>
+        </h1>
+        <p style={{ color: "#6b6b8a", fontSize: 18, maxWidth: 520, margin: "0 auto 32px", lineHeight: 1.6 }}>
+          Free AI tools for students, creators, and SEO writers. Rewrite, summarize, check grammar, and more — instantly.
+        </p>
+        <Link href="/ai-rewriter">
+          <button style={{ background: "linear-gradient(135deg, #7c6aff, #a78bfa)", color: "white", border: "none", padding: "14px 36px", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>
+            ✦ Try AI Rewriter Free →
+          </button>
+        </Link>
+      </div>
 
-        {/* Text Panels */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-          {/* Input */}
-          <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 12, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 11, color: "#6b6b8a", textTransform: "uppercase", letterSpacing: "0.08em" }}>Input</span>
-              <span style={{ fontSize: 11, color: charCount > 4500 ? "#f87171" : "#3a3a52" }}>{charCount}/5000</span>
-            </div>
-            <textarea value={inputText}
-              onChange={(e) => { setInputText(e.target.value); setCharCount(e.target.value.length); }}
-              maxLength={5000}
-              placeholder="Paste or type your text here…"
-              style={{ width: "100%", minHeight: 240, background: "transparent", border: "none", outline: "none", color: "#e8e8f0", padding: 16, fontSize: 13, lineHeight: 1.7, resize: "none", fontFamily: "monospace" }} />
-          </div>
+      {/* AdSense Banner */}
+      <div style={{ maxWidth: 728, margin: "0 auto 40px", textAlign: "center", padding: "0 20px" }}>
+        <ins className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-8754288242636148"
+          data-ad-slot="auto"
+          data-ad-format="auto"
+          data-full-width-responsive="true" />
+      </div>
 
-          {/* Output */}
-          <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 12, overflow: "hidden" }}>
-            <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 11, color: "#6b6b8a", textTransform: "uppercase", letterSpacing: "0.08em" }}>Output · {activeMode.label}</span>
-              {outputText && (
-                <button onClick={() => handleCopy(outputText)}
-                  style={{ background: "none", border: "1px solid #1e1e2e", color: copied ? "#4ade80" : "#6b6b8a", borderRadius: 6, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}>
-                  {copied ? "✓ Copied" : "Copy"}
-                </button>
-              )}
-            </div>
+      {/* Tool Grid */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px 60px" }}>
+        <h2 style={{ textAlign: "center", fontSize: 28, fontWeight: 700, marginBottom: 8 }}>All AI Writing Tools</h2>
+        <p style={{ textAlign: "center", color: "#6b6b8a", marginBottom: 32 }}>Pick a tool and start writing smarter</p>
 
-            {/* Variant tabs */}
-            {variants.length > 1 && (
-              <div style={{ display: "flex", gap: 4, padding: "8px 16px", borderBottom: "1px solid #1e1e2e" }}>
-                {variants.map((_, i) => (
-                  <button key={i} onClick={() => { setSelectedVariant(i); setOutputText(variants[i]); }}
-                    style={{ padding: "4px 12px", borderRadius: 6, fontSize: 12, cursor: "pointer", border: `1px solid ${selectedVariant === i ? activeMode.color : "#1e1e2e"}`, background: selectedVariant === i ? `rgba(255,255,255,0.05)` : "transparent", color: selectedVariant === i ? activeMode.color : "#6b6b8a" }}>
-                    Version {i + 1}
-                  </button>
-                ))}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+          {TOOLS.map((tool) => (
+            <Link key={tool.href} href={tool.href} style={{ textDecoration: "none" }}>
+              <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 14, padding: "20px", cursor: "pointer", transition: "all 0.2s", position: "relative" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = tool.color; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#1e1e2e"; (e.currentTarget as HTMLDivElement).style.transform = "none"; }}>
+                {tool.hot && <span style={{ position: "absolute", top: 12, right: 12, background: "#f59e0b", color: "#000", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>HOT</span>}
+                <div style={{ fontSize: 28, marginBottom: 10 }}>{tool.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4, color: tool.color }}>{tool.label}</div>
+                <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.5 }}>{tool.desc}</div>
               </div>
-            )}
-
-            <div style={{ padding: 16, minHeight: 240, fontSize: 13, lineHeight: 1.7, fontFamily: "monospace", color: error ? "#f87171" : "#e8e8f0", whiteSpace: "pre-wrap" }}>
-              {isLoading
-                ? <span style={{ color: "#6b6b8a", fontStyle: "italic" }}>✦ {loadingVariants ? "Generating 3 versions…" : "Rewriting…"}</span>
-                : error ? `✕ ${error}`
-                : outputText || <span style={{ color: "#3a3a52", fontStyle: "italic" }}>Rewritten text will appear here</span>}
-            </div>
-          </div>
-        </div>
-
-        {/* Buttons */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-          <button onClick={handleRewrite} disabled={isLoading || !inputText.trim()}
-            style={{ background: isLoading ? "#2a2a3e" : "linear-gradient(135deg, #7c6aff, #a78bfa)", color: "white", border: "none", padding: "13px 32px", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.6 : 1 }}>
-            {loading ? "Rewriting…" : "✦ Rewrite Text"}
-          </button>
-          <button onClick={handleVariants} disabled={isLoading || !inputText.trim()}
-            style={{ background: "transparent", color: isLoading ? "#3a3a52" : "#a78bfa", border: `1px solid ${isLoading ? "#1e1e2e" : "#a78bfa"}`, padding: "13px 24px", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: isLoading ? "not-allowed" : "pointer", opacity: isLoading ? 0.5 : 1 }}>
-            {loadingVariants ? "Generating…" : "⟳ 3 Versions"}
-          </button>
+            </Link>
+          ))}
         </div>
       </div>
 
+      {/* SEO Blocks */}
+      <div style={{ background: "#0d0d14", borderTop: "1px solid #1e1e2e", borderBottom: "1px solid #1e1e2e", padding: "50px 20px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Why Use RewordlyAI?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 20 }}>
+            {[
+              { title: "AI Paraphrasing Tool", desc: "Rewrite any sentence or paragraph while keeping the original meaning intact." },
+              { title: "Rewrite Sentence Online", desc: "Fix awkward sentences instantly with AI-powered rewriting technology." },
+              { title: "AI Blog Writer", desc: "Generate full SEO blog posts in seconds. Save hours of writing time." },
+              { title: "Grammar Checker Online", desc: "Detect and fix grammar, spelling, and punctuation errors automatically." },
+            ].map((block) => (
+              <div key={block.title} style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, padding: 20 }}>
+                <div style={{ fontWeight: 700, fontSize: 14, color: "#a78bfa", marginBottom: 8 }}>{block.title}</div>
+                <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.6 }}>{block.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Blog Section */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 20px" }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Writing Tips & Guides</h2>
+        <p style={{ color: "#6b6b8a", marginBottom: 28, fontSize: 14 }}>Learn how to write better with AI</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+          {BLOGS.map((blog) => (
+            <Link key={blog.href} href={blog.href} style={{ textDecoration: "none" }}>
+              <div style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, padding: 24, cursor: "pointer" }}
+                onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.borderColor = "#7c6aff"}
+                onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.borderColor = "#1e1e2e"}>
+                <div style={{ fontSize: 11, color: "#7c6aff", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>Article</div>
+                <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: "#e8e8f0" }}>{blog.title}</div>
+                <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.6 }}>{blog.desc}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* AdSense Bottom */}
+      <div style={{ maxWidth: 728, margin: "0 auto 40px", textAlign: "center", padding: "0 20px" }}>
+        <ins className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-8754288242636148"
+          data-ad-slot="auto"
+          data-ad-format="auto"
+          data-full-width-responsive="true" />
+      </div>
+
       {/* Footer */}
-      <footer style={{ borderTop: "1px solid #1e1e2e", marginTop: 60, padding: "20px 0", textAlign: "center" }}>
-        <p style={{ color: "#3a3a52", fontSize: 12, fontFamily: "monospace", letterSpacing: "0.08em", userSelect: "none" }}>
-          © {new Date().getFullYear()} bimkim · All rights reserved
-        </p>
+      <footer style={{ borderTop: "1px solid #1e1e2e", padding: "24px 20px", textAlign: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 8 }}>
+          <Image src="/logo-icon.png" alt="RewordlyAI" width={20} height={20} />
+          <span style={{ fontWeight: 700, fontSize: 14 }}>RewordlyAI</span>
+        </div>
+        <p style={{ color: "#3a3a52", fontSize: 12, fontFamily: "monospace" }}>© {new Date().getFullYear()} bimkim · All rights reserved</p>
       </footer>
 
     </div>
