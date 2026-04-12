@@ -14,9 +14,9 @@ const TOOLS = [
 ];
 
 const BLOGS = [
-  { title: "Best AI Writing Tools in 2026", desc: "Discover the top AI tools that are changing how people write online.", href: "#" },
-  { title: "How to Rewrite Text with AI", desc: "A complete guide to using AI paraphrasing tools effectively.", href: "#" },
-  { title: "SEO Writing Guide for Beginners", desc: "Learn how to write content that ranks on Google in 2026.", href: "#" },
+  { title: "Best AI Writing Tools in 2026", desc: "Discover the top AI tools that are changing how people write online." },
+  { title: "How to Rewrite Text with AI", desc: "A complete guide to using AI paraphrasing tools effectively." },
+  { title: "SEO Writing Guide for Beginners", desc: "Learn how to write content that ranks on Google in 2026." },
 ];
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
       {/* Navbar */}
       <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8, objectFit: "contain" }} />
+          <img src="/logo-icon.png" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 18, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
         </div>
         <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
@@ -35,9 +35,8 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero — tanpa logo gambar */}
       <div style={{ textAlign: "center", padding: "70px 20px 50px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
-        <img src="/logo.jpeg" alt="RewordlyAI" style={{ height: 60, objectFit: "contain", marginBottom: 24 }} />
         <h1 style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 16, lineHeight: 1.1 }}>
           AI Writing Tools for{" "}
           <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Everyone</span>
@@ -63,7 +62,9 @@ export default function Home() {
                 style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 14, padding: 20, cursor: "pointer", transition: "all 0.2s", position: "relative" }}
                 onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = tool.color; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#1e1e2e"; (e.currentTarget as HTMLDivElement).style.transform = "none"; }}>
-                {tool.hot && <span style={{ position: "absolute", top: 12, right: 12, background: "#f59e0b", color: "#000", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>HOT</span>}
+                {tool.hot && (
+                  <span style={{ position: "absolute", top: 12, right: 12, background: "#f59e0b", color: "#000", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>HOT</span>
+                )}
                 <div style={{ fontSize: 28, marginBottom: 10 }}>{tool.icon}</div>
                 <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4, color: tool.color }}>{tool.label}</div>
                 <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.5 }}>{tool.desc}</div>
@@ -111,7 +112,7 @@ export default function Home() {
       {/* Footer */}
       <footer style={{ borderTop: "1px solid #1e1e2e", padding: "24px 20px", textAlign: "center" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 8 }}>
-          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={20} height={20} style={{ borderRadius: 4, objectFit: "contain" }} />
+          <img src="/logo-icon.png" alt="RewordlyAI" width={20} height={20} style={{ borderRadius: 4, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 14 }}>RewordlyAI</span>
         </div>
         <p style={{ color: "#3a3a52", fontSize: 12, fontFamily: "monospace" }}>© {new Date().getFullYear()} bimkim · All rights reserved</p>

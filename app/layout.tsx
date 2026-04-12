@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "RewordlyAI - Free AI Writing Tools",
   description: "Free AI writing tools for students, creators, and SEO writers.",
   icons: {
-    icon: "/logo-icon.jpeg",
+    icon: "/logo-icon.png",
   },
 };
 
