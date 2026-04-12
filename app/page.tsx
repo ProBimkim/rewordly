@@ -23,23 +23,28 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e8f0", fontFamily: "sans-serif" }}>
 
-      {/* Navbar */}
-      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "12px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <img
-            src="/logo-icon.png"
-            alt="RewordlyAI"
-            style={{ width: 56, height: 56, borderRadius: 10, objectFit: "contain", background: "transparent" }}
-          />
-          <span style={{ fontWeight: 800, fontSize: 22, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            RewordlyAI
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
-          <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none", fontWeight: 600 }}>Home</Link>
-          <Link href="/ai-rewriter" style={{ color: "#6b6b8a", textDecoration: "none" }}>Tools</Link>
-        </div>
-      </nav>
+          {/* Navbar */}
+          <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "12px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <img
+                src="/logo-icon.png"
+                alt="RewordlyAI"
+                style={{
+                  width: 80,
+                  height: 80,
+                  objectFit: "contain",
+                  borderRadius: 12,
+                }}
+              />
+              <span style={{ fontWeight: 800, fontSize: 24, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                RewordlyAI
+              </span>
+            </div>
+            <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
+              <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none", fontWeight: 600 }}>Home</Link>
+              <Link href="/ai-rewriter" style={{ color: "#6b6b8a", textDecoration: "none" }}>Tools</Link>
+            </div>
+          </nav>
 
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "70px 20px 50px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
