@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 interface ToolPageProps {
   toolId: string;
@@ -52,7 +51,7 @@ export default function ToolPage({
       {/* Navbar */}
       <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Image src="/logo-icon.jpeg" alt="RewordlyAI" width={32} height={32} style={{ borderRadius: 8 }} />
+          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={32} height={32} style={{ borderRadius: 8, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 16, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
         </Link>
         <Link href="/" style={{ color: "#6b6b8a", textDecoration: "none", fontSize: 14 }}>← All Tools</Link>
@@ -60,17 +59,17 @@ export default function ToolPage({
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px" }}>
 
-        {/* Title */}
         <div style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>{icon}</div>
+          <div style={{ fontSize: 40, marginBottom: 8 }}>{icon}</div>
           <h1 style={{ fontSize: 30, fontWeight: 800, marginBottom: 8, color }}>{title}</h1>
           <p style={{ color: "#6b6b8a", fontSize: 14, lineHeight: 1.7 }}>{description}</p>
         </div>
 
         {/* Input */}
-        <div style={{ background: "#111118", border: `1.5px solid #1e1e2e`, borderRadius: 12, overflow: "hidden", marginBottom: 12 }}>
-          <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", fontSize: 11, color: "#6b6b8a", textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>
-            Your Input · {inputText.length}/5000
+        <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 12, overflow: "hidden", marginBottom: 12 }}>
+          <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 11, color: "#6b6b8a", textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>Your Input</span>
+            <span style={{ fontSize: 11, color: "#3a3a52" }}>{inputText.length}/5000</span>
           </div>
           <textarea value={inputText} onChange={(e) => setInputText(e.target.value)} maxLength={5000}
             placeholder={placeholder}
@@ -80,8 +79,8 @@ export default function ToolPage({
         {/* Button */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>
           <button onClick={handleSubmit} disabled={loading || !inputText.trim()}
-            style={{ background: loading ? "#2a2a3e" : `linear-gradient(135deg, ${color}, #a78bfa)`, color: "white", border: "none", padding: "13px 40px", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.6 : 1 }}>
-            {loading ? "Processing…" : `${icon} Run ${title}`}
+            style={{ background: loading ? "#2a2a3e" : `linear-gradient(135deg, ${color}, #7c6aff)`, color: "white", border: "none", padding: "13px 40px", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.6 : 1 }}>
+            {loading ? "⏳ Processing…" : `${icon} Run ${title}`}
           </button>
         </div>
 
@@ -96,7 +95,8 @@ export default function ToolPage({
             )}
           </div>
           <div style={{ padding: 16, minHeight: 180, fontSize: 13, lineHeight: 1.8, fontFamily: "monospace", whiteSpace: "pre-wrap", color: error ? "#f87171" : "#e8e8f0" }}>
-            {loading ? <span style={{ color: "#6b6b8a", fontStyle: "italic" }}>✦ AI is working…</span>
+            {loading
+              ? <span style={{ color: "#6b6b8a", fontStyle: "italic" }}>✦ AI is working…</span>
               : error ? `✕ ${error}`
               : outputText || <span style={{ color: "#3a3a52", fontStyle: "italic" }}>Result will appear here</span>}
           </div>
@@ -107,8 +107,8 @@ export default function ToolPage({
           <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>Frequently Asked Questions</h2>
           {faqs.map((faq) => (
             <div key={faq.q} style={{ marginBottom: 16, paddingBottom: 16, borderBottom: "1px solid #1e1e2e" }}>
-              <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color }}>Q: {faq.q}</div>
-              <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.7 }}>A: {faq.a}</div>
+              <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color }}>{faq.q}</div>
+              <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.7 }}>{faq.a}</div>
             </div>
           ))}
         </div>

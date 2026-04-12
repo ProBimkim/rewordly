@@ -3,9 +3,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "RewordlyAI - Free AI Writing Tools",
-  description: "Free AI writing tools for students, creators, and SEO writers. Rewrite, summarize, check grammar, and more.",
+  description: "Free AI writing tools for students, creators, and SEO writers.",
   icons: {
-    icon: "/logo-icon.png",
+    icon: "/logo-icon.jpeg",
   },
 };
 

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 
 const TOOLS = [
@@ -15,9 +14,9 @@ const TOOLS = [
 ];
 
 const BLOGS = [
-  { title: "Best AI Writing Tools in 2026", desc: "Discover the top AI tools that are changing how people write online.", href: "/blog/best-ai-writing-tools-2026" },
-  { title: "How to Rewrite Text with AI", desc: "A complete guide to using AI paraphrasing tools effectively.", href: "/blog/how-to-rewrite-text-with-ai" },
-  { title: "SEO Writing Guide for Beginners", desc: "Learn how to write content that ranks on Google in 2026.", href: "/blog/seo-writing-guide" },
+  { title: "Best AI Writing Tools in 2026", desc: "Discover the top AI tools that are changing how people write online.", href: "#" },
+  { title: "How to Rewrite Text with AI", desc: "A complete guide to using AI paraphrasing tools effectively.", href: "#" },
+  { title: "SEO Writing Guide for Beginners", desc: "Learn how to write content that ranks on Google in 2026.", href: "#" },
 ];
 
 export default function Home() {
@@ -27,26 +26,23 @@ export default function Home() {
       {/* Navbar */}
       <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Image src="/logo-icon.png" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8 }} />
+          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={36} height={36} style={{ borderRadius: 8, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 18, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
         </div>
-        <div style={{ display: "flex", gap: 24, fontSize: 14, color: "#6b6b8a" }}>
+        <div style={{ display: "flex", gap: 24, fontSize: 14 }}>
           <Link href="/" style={{ color: "#e8e8f0", textDecoration: "none" }}>Home</Link>
           <Link href="/ai-rewriter" style={{ color: "#6b6b8a", textDecoration: "none" }}>Tools</Link>
-          <Link href="/blog/best-ai-writing-tools-2026" style={{ color: "#6b6b8a", textDecoration: "none" }}>Blog</Link>
         </div>
       </nav>
 
       {/* Hero */}
-      <div style={{ textAlign: "center", padding: "80px 20px 60px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
-        <Image src="/logo.png" alt="RewordlyAI" width={200} height={60} style={{ marginBottom: 24, objectFit: "contain" }} />
-        <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 16, lineHeight: 1.1 }}>
+      <div style={{ textAlign: "center", padding: "70px 20px 50px", background: "radial-gradient(ellipse at top, rgba(124,106,255,0.08) 0%, transparent 70%)" }}>
+        <img src="/logo.jpeg" alt="RewordlyAI" style={{ height: 60, objectFit: "contain", marginBottom: 24 }} />
+        <h1 style={{ fontSize: "clamp(32px, 5vw, 54px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 16, lineHeight: 1.1 }}>
           AI Writing Tools for{" "}
-          <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Everyone
-          </span>
+          <span style={{ background: "linear-gradient(90deg, #7c6aff, #a78bfa, #f472b6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Everyone</span>
         </h1>
-        <p style={{ color: "#6b6b8a", fontSize: 18, maxWidth: 520, margin: "0 auto 32px", lineHeight: 1.6 }}>
+        <p style={{ color: "#6b6b8a", fontSize: 17, maxWidth: 500, margin: "0 auto 32px", lineHeight: 1.6 }}>
           Free AI tools for students, creators, and SEO writers. Rewrite, summarize, check grammar, and more — instantly.
         </p>
         <Link href="/ai-rewriter">
@@ -56,25 +52,15 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* AdSense Banner */}
-      <div style={{ maxWidth: 728, margin: "0 auto 40px", textAlign: "center", padding: "0 20px" }}>
-        <ins className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-8754288242636148"
-          data-ad-slot="auto"
-          data-ad-format="auto"
-          data-full-width-responsive="true" />
-      </div>
-
       {/* Tool Grid */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px 60px" }}>
-        <h2 style={{ textAlign: "center", fontSize: 28, fontWeight: 700, marginBottom: 8 }}>All AI Writing Tools</h2>
-        <p style={{ textAlign: "center", color: "#6b6b8a", marginBottom: 32 }}>Pick a tool and start writing smarter</p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+        <h2 style={{ textAlign: "center", fontSize: 26, fontWeight: 700, marginBottom: 8 }}>All AI Writing Tools</h2>
+        <p style={{ textAlign: "center", color: "#6b6b8a", marginBottom: 32, fontSize: 14 }}>Pick a tool and start writing smarter</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
           {TOOLS.map((tool) => (
             <Link key={tool.href} href={tool.href} style={{ textDecoration: "none" }}>
-              <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 14, padding: "20px", cursor: "pointer", transition: "all 0.2s", position: "relative" }}
+              <div
+                style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 14, padding: 20, cursor: "pointer", transition: "all 0.2s", position: "relative" }}
                 onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = tool.color; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "#1e1e2e"; (e.currentTarget as HTMLDivElement).style.transform = "none"; }}>
                 {tool.hot && <span style={{ position: "absolute", top: 12, right: 12, background: "#f59e0b", color: "#000", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 20 }}>HOT</span>}
@@ -90,16 +76,16 @@ export default function Home() {
       {/* SEO Blocks */}
       <div style={{ background: "#0d0d14", borderTop: "1px solid #1e1e2e", borderBottom: "1px solid #1e1e2e", padding: "50px 20px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center", fontSize: 24, fontWeight: 700, marginBottom: 32 }}>Why Use RewordlyAI?</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 20 }}>
+          <h2 style={{ textAlign: "center", fontSize: 22, fontWeight: 700, marginBottom: 28 }}>Why Use RewordlyAI?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 16 }}>
             {[
-              { title: "AI Paraphrasing Tool", desc: "Rewrite any sentence or paragraph while keeping the original meaning intact." },
-              { title: "Rewrite Sentence Online", desc: "Fix awkward sentences instantly with AI-powered rewriting technology." },
+              { title: "AI Paraphrasing Tool", desc: "Rewrite any sentence while keeping the original meaning intact." },
+              { title: "Rewrite Sentence Online", desc: "Fix awkward sentences instantly with AI-powered rewriting." },
               { title: "AI Blog Writer", desc: "Generate full SEO blog posts in seconds. Save hours of writing time." },
               { title: "Grammar Checker Online", desc: "Detect and fix grammar, spelling, and punctuation errors automatically." },
             ].map((block) => (
               <div key={block.title} style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, padding: 20 }}>
-                <div style={{ fontWeight: 700, fontSize: 14, color: "#a78bfa", marginBottom: 8 }}>{block.title}</div>
+                <div style={{ fontWeight: 700, fontSize: 13, color: "#a78bfa", marginBottom: 8 }}>{block.title}</div>
                 <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.6 }}>{block.desc}</div>
               </div>
             ))}
@@ -108,38 +94,24 @@ export default function Home() {
       </div>
 
       {/* Blog Section */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 20px" }}>
-        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Writing Tips & Guides</h2>
-        <p style={{ color: "#6b6b8a", marginBottom: 28, fontSize: 14 }}>Learn how to write better with AI</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "50px 20px" }}>
+        <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Writing Tips & Guides</h2>
+        <p style={{ color: "#6b6b8a", marginBottom: 24, fontSize: 14 }}>Learn how to write better with AI</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
           {BLOGS.map((blog) => (
-            <Link key={blog.href} href={blog.href} style={{ textDecoration: "none" }}>
-              <div style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, padding: 24, cursor: "pointer" }}
-                onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.borderColor = "#7c6aff"}
-                onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.borderColor = "#1e1e2e"}>
-                <div style={{ fontSize: 11, color: "#7c6aff", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>Article</div>
-                <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: "#e8e8f0" }}>{blog.title}</div>
-                <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.6 }}>{blog.desc}</div>
-              </div>
-            </Link>
+            <div key={blog.title} style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, padding: 24 }}>
+              <div style={{ fontSize: 11, color: "#7c6aff", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>Article</div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>{blog.title}</div>
+              <div style={{ fontSize: 13, color: "#6b6b8a", lineHeight: 1.6 }}>{blog.desc}</div>
+            </div>
           ))}
         </div>
-      </div>
-
-      {/* AdSense Bottom */}
-      <div style={{ maxWidth: 728, margin: "0 auto 40px", textAlign: "center", padding: "0 20px" }}>
-        <ins className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-8754288242636148"
-          data-ad-slot="auto"
-          data-ad-format="auto"
-          data-full-width-responsive="true" />
       </div>
 
       {/* Footer */}
       <footer style={{ borderTop: "1px solid #1e1e2e", padding: "24px 20px", textAlign: "center" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 8 }}>
-          <Image src="/logo-icon.png" alt="RewordlyAI" width={20} height={20} />
+          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={20} height={20} style={{ borderRadius: 4, objectFit: "contain" }} />
           <span style={{ fontWeight: 700, fontSize: 14 }}>RewordlyAI</span>
         </div>
         <p style={{ color: "#3a3a52", fontSize: 12, fontFamily: "monospace" }}>© {new Date().getFullYear()} bimkim · All rights reserved</p>
