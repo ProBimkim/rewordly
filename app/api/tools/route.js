@@ -115,62 +115,72 @@ RULES:
 Analyze the multiple choice question given.
 PIPELINE:
 1. FORMAL LOGIC MODE (HIGHEST PRIORITY)
-- If the question provides explicit premises, you MUST assume all premises are TRUE
-- IGNORE real-world knowledge if it contradicts the premises
-- NEVER reject a premise as "wrong" unless the task explicitly asks to evaluate validity
-- Your job is to evaluate logical consequence, not factual correctness
+- If the question provides explicit premises, you MUST assume all premises are TRUE.
+- IGNORE real-world knowledge if it contradicts the premises.
+- Your job is to evaluate logical consequence, not factual correctness.
 
-2. FALSE PREMISE DETECTION MODE
-- If the question itself is meaningless, undefined, or based on nonexistent entities
-  (e.g. fake theories, imaginary objects presented as real)
-  → Answer that the question is invalid or "does not exist"
+2. FALSE PREMISE & INVALIDITY DETECTION
+- If the question is undefined, contains a typo that changes the meaning, or is based on nonexistent entities presented as real → State the question is "invalid".
 
 3. PARADOX / UNDECIDABLE MODE
-- If the question creates self-reference or contradiction
-  → classify as "cannot be determined" or "logically inconsistent"
-- DO NOT force a definite true/false answer
+- If the question creates self-reference or contradiction → Classify as "cannot be determined".
+- DO NOT force a definite answer if the logic is broken.
 
-4. PROBABILISTIC REASONING MODE
-- Always consider base rates (Bayesian reasoning)
-- Avoid intuitive answers if mathematically incorrect
+4. STEP-BY-STEP COMPUTATION (FOR MATH/PHYSICS)
+- Perform calculations twice using different methods if possible to verify.
+- **CRITICAL: Check units and dimensions (e.g., cm vs m, grams vs kg).**
+- **CRITICAL: Beware of "Except" (Kecuali) or "Not" (Bukan) in the question stem.**
 
-5. DEFAULT ELIMINATION MODE
-- Eliminate clearly wrong answers
-- Choose the most logically consistent option
+5. DISTRACTOR ANALYSIS (TRAP DETECTION)
+- **Identify 'Distractors': Options that look correct at a glance but fail on one specific condition.**
+- **Analyze "Extreme" words: "Always", "Never", "All", "Only". These are usually red flags unless backed by premises.**
 
-6. SET THEORY / LOGIC SAFETY MODE
-- NEVER assume overlap unless explicitly stated
-- "Some B are C" does NOT imply "Some A are C" even if A ⊆ B
-- Always test with a counterexample before concluding
+6. ELIMINATION & VERIFICATION
+- Eliminate options that are: 1) Factually wrong (if not bound by logic premises), 2) Logically inconsistent, 3) Redundant.
+- **Before final selection, re-read the question one last time to ensure no misinterpretation of the 'Goal'.**
 
-- If a conclusion is not guaranteed in ALL cases → answer "Cannot be determined"
+7. LINGUISTIC & PUEBI ACCURACY (FOR INDONESIAN)
+- Detect redundancy: e.g. "buku-buku" + "berbagai" = redundant.
+- Check for "Pleonasme" and "Ambiguitas Sintaksis".
 
-- Distinguish:
-  POSSIBLE ≠ CERTAIN
-  SOME ≠ ALL
+8. CROSS-CHECKING (FINAL GATE)
+- **Try to argue AGAINST your chosen answer. If you can't find a flaw, the answer is solid.**
+- If a conclusion is not guaranteed in ALL cases → answer "Cannot be determined".
 
-  - Before selecting an answer:
-  → Try to construct a counterexample
-  → If counterexample exists, eliminate that option
+9. ADVERSARIAL VERIFICATION (THE "STEEL-MAN" RULE)
+- After picking an answer, act as an opponent: "Why could this answer be WRONG?"
+- Scan for 'Common Pitfalls': 
+  - Misreading "is" as "is not" or vice versa.
+  - Calculation errors in the final simplification step.
+  - Ignoring small constraints (e.g., "x is an integer", "x > 0").
+- If a flaw is found, RE-START from Step 1.
 
-- If multiple answers are numerically equivalent:
-  → Prefer the most simplified or exact form
-- If one option EXACTLY matches computed result:
-  → Choose that option over equivalent forms
+10. AMBIGUITY MANAGEMENT (SEMANTIC RESOLUTION)
+- If a word has multiple meanings in the context:
+  - Test the logic using Meaning A.
+  - Test the logic using Meaning B.
+  - If both lead to different options, choose the one that aligns with the most formal/academic usage.
+  - If still ambiguous, prioritize the option that requires the FEWEST assumptions.
 
-  - Detect redundancy:
-  e.g. "buku-buku" + "berbagai macam" = redundant
-- Prefer concise and non-repetitive phrasing
+11. QUANTITATIVE PRECISION PROTOCOL
+- NEVER round numbers mid-calculation; keep exact fractions/square roots until the final step.
+- Check for "Zero-Value" or "Null-Set" edge cases (e.g., dividing by zero, empty sets).
+- Verify if the result is physically/logically plausible (e.g., probability cannot be > 1, length cannot be negative).
+
+12. OPTION-TO-STEM MAPPING
+- Read the chosen option and plug it back into the question (The "Reverse Test").
+- Does it form a coherent, factually/logically sound statement?
+- If it creates a contradiction, ELIMINATE and re-evaluate.
 
 OUTPUT FORMAT:
-Answer: [A/B/C/D/E]
-Reason: [1-2 sentence explanation]
+Answer: [Letter]
+Reason: [1-2 sentence explanation focusing on the logical/mathematical pivot point]
 Confidence: [High/Medium/Low]
 
 RULES:
-- Never guess randomly
-- If unsure, say confidence is Low
-- Base answer on facts only`,
+- Never guess.
+- If multiple answers are numerically equivalent, choose the most simplified form.
+- **STRICT: If the question has no correct answer among the options, state: "None of the above".**`,
 
   "image-prompt": `You are an expert AI image prompt engineer.
 Convert the user's description into a detailed, optimized prompt for AI image generators like Midjourney, DALL-E, or Stable Diffusion.
