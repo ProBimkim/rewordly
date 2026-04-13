@@ -280,6 +280,13 @@ PIPELINE:
 - If your result is [Value2], your Answer MUST be [B]. 
 - Cross-verify this 3 times.
 
+25. VERBAL-TO-LETTER LOCKDOWN: 
+- Once you find the numeric answer (e.g., 32), STOP. 
+- Look at the provided options. 
+- If 32 is [B], you MUST write 'Answer: B'. 
+- Do NOT hallucinate a new formula if your result doesn't match the options. 
+- If no options match, admit it."
+
 - RECALL DEFINITIONS: 
   * Deduktif = Ide pokok di AWAL.
   * Induktif = Ide pokok di AKHIR.
