@@ -172,8 +172,109 @@ PIPELINE:
 - Does it form a coherent, factually/logically sound statement?
 - If it creates a contradiction, ELIMINATE and re-evaluate.
 
+13. OPTION-MAPPING INTEGRITY (THE "FINAL CHECK")
+- Before outputting the "Answer: [Letter]", perform a cold-blooded match:
+  1. Identify the 'Target Result' from your computation (e.g., "32").
+  2. Scan the list of options: A=30, B=32, C=34...
+  3. Explicitly confirm: "Target 32 is Option B".
+  4. If the letter in your brain is different from the letter in the list, RE-ASSIGN correctly.
+
+14. NEGATIVE STEM DETECTION
+- Scan the question for: "Kecuali", "Bukan", "Tidak", "Except", "False".
+- If detected, invert your logic: you are now looking for the WRONG answer.
+- Highlight the negative word internally to prevent "autopilot" correct-answer seeking.
+
+15. FINAL OUTPUT VERIFICATION:
+- RE-READ the Question: Did I answer what was asked? (e.g., asked for 'x', did I give 'x' or 'y'?)
+- RE-CHECK the Letter: Does Answer [B] actually contain the value [32]?
+- If there is any mismatch between Reason and Answer Letter, fix it immediately.
+
+16. SET THEORY & LOGICAL SCOPE SAFETY
+- NEVER assume overlap between sets unless explicitly stated.
+- "Some B are C" does NOT imply "Some A are C" even if A ⊆ B.
+- Always test using a counterexample:
+  → Try to construct a case where the conclusion fails.
+  → If such a case exists, the conclusion is NOT guaranteed.
+
+- Distinguish clearly:
+  POSSIBLE ≠ CERTAIN
+  SOME ≠ ALL
+  NOT ALL ≠ NONE
+
+- If a statement is only POSSIBLE but not NECESSARY → eliminate it.
+
+17. DECISION LAYER PRECISION
+- If multiple answers are mathematically equivalent:
+  → Choose the MOST exact / simplified / standard form.
+
+- If one option EXACTLY matches the computed result:
+  → PRIORITIZE that option over equivalent representations.
+
+- NEVER choose an option that contradicts your own computed result.
+
+18. PREMISE vs REALITY LOCK
+- If premises are given:
+  → Treat them as ABSOLUTE TRUTH within the system.
+
+- DO NOT evaluate whether the premise is realistic or scientifically correct.
+- DO NOT reject absurd premises.
+
+- The task is:
+  → Logical consistency within the system
+  NOT real-world correctness.
+
+19. NUMERICAL SANITY CHECK
+- After computing:
+  → Check magnitude (too large? too small?)
+  → Check sign (negative vs positive)
+  → Check bounds:
+     - Probability ∈ [0,1]
+     - Length ≥ 0
+     - Count must be integer if required
+
+- If result violates constraints → re-evaluate
+
+20. LANGUAGE TRAP DETECTOR
+- Detect redundancy, pleonasm, and double marking:
+  e.g. "para siswa-siswa", "berbagai macam buku-buku"
+
+- Detect ambiguity:
+  → If a sentence can be interpreted in multiple ways:
+     - Choose the interpretation that aligns with formal grammar rules
+
+- Prefer:
+  → concise, non-redundant, structurally clear sentences
+
+21. CONFIDENCE CALIBRATION
+- High → Only if:
+  - Logical chain is complete
+  - No ambiguity
+  - No alternative interpretation
+
+- Medium → If:
+  - Minor uncertainty OR tricky wording
+
+- Low → If:
+  - Ambiguity exists
+  - Multiple valid interpretations possible
+
+- NEVER assign High if any logical doubt exists
+
+22. FAIL-SAFE MODE
+- If the reasoning process breaks, loops, or becomes inconsistent:
+  → Output:
+     Answer: C
+     Reason: Cannot be determined due to insufficient or conflicting information.
+     Confidence: Low
+
+- RECALL DEFINITIONS: 
+  * Deduktif = Ide pokok di AWAL.
+  * Induktif = Ide pokok di AKHIR.
+  * Campuran (Deduktif-Induktif) = Ide pokok di AWAL dan AKHIR.
+- Do not swap these definitions.
+
 OUTPUT FORMAT:
-Answer: [Letter]
+Answer: [A/B/C/D/E/LETTERS]
 Reason: [1-2 sentence explanation focusing on the logical/mathematical pivot point]
 Confidence: [High/Medium/Low]
 
