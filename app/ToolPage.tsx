@@ -49,10 +49,16 @@ export default function ToolPage({
     <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e8f0", fontFamily: "sans-serif" }}>
 
       {/* Navbar */}
-      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "14px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <img src="/logo-icon.jpeg" alt="RewordlyAI" width={32} height={32} style={{ borderRadius: 8, objectFit: "contain" }} />
-          <span style={{ fontWeight: 700, fontSize: 16, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>RewordlyAI</span>
+      <nav style={{ borderBottom: "1px solid #1e1e2e", padding: "12px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,15,0.95)", position: "sticky", top: 0, zIndex: 50 }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
+          <img
+            src="/logo-icon.png"
+            alt="RewordlyAI"
+            style={{ width: 56, height: 56, objectFit: "contain", borderRadius: 10 }}
+          />
+          <span style={{ fontWeight: 800, fontSize: 22, background: "linear-gradient(90deg, #7c6aff, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            RewordlyAI
+          </span>
         </Link>
         <Link href="/" style={{ color: "#6b6b8a", textDecoration: "none", fontSize: 14 }}>← All Tools</Link>
       </nav>
@@ -65,7 +71,6 @@ export default function ToolPage({
           <p style={{ color: "#6b6b8a", fontSize: 14, lineHeight: 1.7 }}>{description}</p>
         </div>
 
-        {/* Input */}
         <div style={{ background: "#111118", border: "1.5px solid #1e1e2e", borderRadius: 12, overflow: "hidden", marginBottom: 12 }}>
           <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", display: "flex", justifyContent: "space-between" }}>
             <span style={{ fontSize: 11, color: "#6b6b8a", textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>Your Input</span>
@@ -76,7 +81,6 @@ export default function ToolPage({
             style={{ width: "100%", minHeight: 180, background: "transparent", border: "none", outline: "none", color: "#e8e8f0", padding: 16, fontSize: 13, lineHeight: 1.7, resize: "none", fontFamily: "monospace" }} />
         </div>
 
-        {/* Button */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>
           <button onClick={handleSubmit} disabled={loading || !inputText.trim()}
             style={{ background: loading ? "#2a2a3e" : `linear-gradient(135deg, ${color}, #7c6aff)`, color: "white", border: "none", padding: "13px 40px", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.6 : 1 }}>
@@ -84,7 +88,6 @@ export default function ToolPage({
           </button>
         </div>
 
-        {/* Output */}
         <div style={{ background: "#111118", border: `1.5px solid ${outputText ? color : "#1e1e2e"}`, borderRadius: 12, overflow: "hidden", marginBottom: 32 }}>
           <div style={{ padding: "10px 16px", borderBottom: "1px solid #1e1e2e", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: 11, color: "#6b6b8a", textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>{outputLabel}</span>
@@ -102,7 +105,6 @@ export default function ToolPage({
           </div>
         </div>
 
-        {/* FAQ */}
         <div style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 14, padding: 28, marginBottom: 28 }}>
           <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>Frequently Asked Questions</h2>
           {faqs.map((faq) => (
@@ -113,7 +115,6 @@ export default function ToolPage({
           ))}
         </div>
 
-        {/* Related Tools */}
         <div>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>Try Other Tools</h3>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" as const }}>

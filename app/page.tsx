@@ -11,6 +11,10 @@ const TOOLS = [
   { icon: "📧", label: "Email Generator", desc: "Write professional emails fast", href: "/email-generator", color: "#fb923c" },
   { icon: "📣", label: "Marketing Copy", desc: "Generate converting ad copy", href: "/marketing-copy", color: "#a78bfa" },
   { icon: "🛍️", label: "Product Description", desc: "Write compelling product copy", href: "/product-description", color: "#f87171" },
+  { icon: "🧠", label: "Smart Summarizer", desc: "Auto-detects & summarizes smartly", href: "/summarizer-auto", color: "#34d399" },
+  { icon: "🎯", label: "MCQ Solver", desc: "Solve multiple choice questions with AI", href: "/mcq-solver", color: "#60a5fa", hot: true },
+  { icon: "🎨", label: "Image Prompt Generator", desc: "Create perfect AI image prompts", href: "/image-prompt", color: "#f472b6" },
+  { icon: "📈", label: "Content Expander", desc: "Expand short text into full content", href: "/content-expander", color: "#fb923c" },
 ];
 
 const BLOGS = [

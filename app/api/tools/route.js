@@ -1,3 +1,22 @@
+// Basic bot protection — rate limit per IP
+const ipRequests = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 menit
+  const maxRequests = 20; // max 20 request per menit per IP
+
+  if (!ipRequests.has(ip)) {
+    ipRequests.set(ip, []);
+  }
+
+  const requests = ipRequests.get(ip).filter(time => now - time < windowMs);
+  requests.push(now);
+  ipRequests.set(ip, requests);
+
+  return requests.length > maxRequests;
+}
+
 const SYSTEM_PROMPT = `You are a professional AI writing assistant. 
 Always preserve meaning, never hallucinate, never add false information.
 Output ONLY the result text, no explanations, no labels.`;
@@ -78,6 +97,62 @@ RULES:
 - 100-200 words
 - End with a subtle call to action
 OUTPUT: Only the product description.`,
+
+
+"summarizer-auto": `You are an expert summarization engine.
+Read the input and automatically detect if it needs:
+- Short summary (under 100 words) for short text
+- Bullet point summary for lists/structured content  
+- Paragraph summary for articles/essays
+Then summarize accordingly.
+RULES:
+- Capture ALL key points
+- Never add new information
+- Never hallucinate
+- Output only the summary`,
+
+  "mcq-solver": `You are an expert exam question solver.
+Analyze the multiple choice question given.
+PIPELINE:
+1. Read and classify the question type
+2. Eliminate obviously wrong options
+3. Score remaining options by logic
+4. Select the most correct answer
+5. Explain why briefly
+
+OUTPUT FORMAT:
+Answer: [A/B/C/D]
+Reason: [1-2 sentence explanation]
+Confidence: [High/Medium/Low]
+
+RULES:
+- Never guess randomly
+- If unsure, say confidence is Low
+- Base answer on facts only`,
+
+  "image-prompt": `You are an expert AI image prompt engineer.
+Convert the user's description into a detailed, optimized prompt for AI image generators like Midjourney, DALL-E, or Stable Diffusion.
+
+RULES:
+- Include: subject, style, lighting, mood, camera angle, color palette
+- Add technical quality tags: 8k, ultra detailed, photorealistic (if relevant)
+- Never generate prompts for: real person faces, deepfakes, identity replication, NSFW content
+- If request violates rules: respond with "This request cannot be processed for safety reasons."
+
+OUTPUT FORMAT:
+Prompt: [full optimized prompt]
+Style Tags: [comma separated]
+Negative Prompt: [things to avoid]`,
+
+  "content-expander": `You are a professional content expansion specialist.
+Take the short input text and expand it into a fuller, more detailed version.
+RULES:
+- Keep the original meaning and tone
+- Add relevant details, examples, or context
+- Do NOT add false information or hallucinate facts
+- Aim for 2-3x the original length
+- Keep it natural and readable
+OUTPUT: Only the expanded text`,
 };
 
 const TEMPERATURE = {
@@ -89,6 +164,10 @@ const TEMPERATURE = {
   "email-generator": 0.5,
   "marketing-copy": 0.7,
   "product-description": 0.6,
+  "summarizer-auto": 0.3,
+  "mcq-solver": 0.2,
+  "image-prompt": 0.7,
+  "content-expander": 0.6,
 };
 
 async function callGroq(text, tool) {
@@ -118,6 +197,11 @@ async function callGroq(text, tool) {
 
 export async function POST(req) {
   const { text, tool } = await req.json();
+
+const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return Response.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
+  }
 
   if (!text || text.trim().length < 3) {
     return Response.json({ error: "Text too short" }, { status: 400 });

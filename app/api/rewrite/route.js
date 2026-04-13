@@ -1,3 +1,22 @@
+// Basic bot protection — rate limit per IP
+const ipRequests = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 menit
+  const maxRequests = 20; // max 20 request per menit per IP
+
+  if (!ipRequests.has(ip)) {
+    ipRequests.set(ip, []);
+  }
+
+  const requests = ipRequests.get(ip).filter(time => now - time < windowMs);
+  requests.push(now);
+  ipRequests.set(ip, requests);
+
+  return requests.length > maxRequests;
+}
+
 const SYSTEM_PROMPT = `You are a high-precision text rewriting system.
 
 Your primary objective:
@@ -114,6 +133,11 @@ async function callGroq(text, mode, attempt = 1) {
 
 export async function POST(req) {
   const { text, mode, variants = false } = await req.json();
+
+const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return Response.json({ error: "Too many requests. Please wait a minute." }, { status: 429 });
+  }
 
   if (!text || text.trim().length < 5) {
     return Response.json({ error: "Text too short" }, { status: 400 });
