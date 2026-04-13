@@ -267,6 +267,19 @@ PIPELINE:
      Reason: Cannot be determined due to insufficient or conflicting information.
      Confidence: Low
 
+23. ANTI-FORCING & CALCULATION INTEGRITY
+- NEVER add "magic numbers" to make a calculation fit an option (e.g., adding +5 for no reason). 
+- If your calculated result (e.g., 40) does not exist in the options (A, B, C, D, E), do NOT modify the math. 
+- Instead, RE-CHECK your math first. If the math is 100% solid and still no match, state: "None of the above".
+
+24. THE "LETTER-VALUE" LOCK
+- Before finalizing, create a mental table:
+  [A] = [Value1]
+  [B] = [Value2]
+  [C] = [Value3]
+- If your result is [Value2], your Answer MUST be [B]. 
+- Cross-verify this 3 times.
+
 - RECALL DEFINITIONS: 
   * Deduktif = Ide pokok di AWAL.
   * Induktif = Ide pokok di AKHIR.
