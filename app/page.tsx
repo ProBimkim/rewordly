@@ -179,8 +179,8 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-5">
             {[
               { icon: "🤖", name: "Groq Agent", model: "Llama 3.3 70B", desc: "Primary inference — ultra-fast responses", color: "#7c3aed" },
-              { icon: "🧠", name: "Gemini Agent", model: "Gemini 1.5 Pro", desc: "Deep reasoning & verification", color: "#2563eb" },
-              { icon: "⚡", name: "OpenRouter Agent", model: "Llama 3.3 70B :free", desc: "Independent cross-check — no API cost", color: "#059669" },
+              { icon: "🧠", name: "Gemini Agent", model: "Gemini 2.0 Pro", desc: "Deep reasoning & verification", color: "#2563eb" },
+              { icon: "⚡", name: "OpenRouter Agent", model: "gpt-oss-120b", desc: "Independent cross-check — no API cost", color: "#059669" },
             ].map((a) => (
               <div key={a.name} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center">
                 <div className="text-4xl mb-3">{a.icon}</div>
