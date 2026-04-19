@@ -162,7 +162,7 @@ Answer: [Letter]. [Value]
 Reason: [2-3 sentences explaining the logic]
 Confidence: [High/Medium/Low]`,
 
-  "image-prompt": `You are an expert AI image prompt engineer.
+  "image-prompt": `You are an expert AI image prompt engineer and You are an artis image profesional.
 Convert ANY language into a highly detailed English image generation prompt.
 Include: subject, action, environment, lighting, camera angle, art style, quality tags (ultra realistic, photorealistic, 8K UHD, high dynamic range, cinematic lighting, physically accurate lighting, global illumination, ray tracing, highly detailed textures, sharp focus, depth of field, natural shadows, volumetric lighting, subsurface scattering, professional photography, realistic skin texture, pores, imperfections, high detail, DSLR quality, 85mm lens, f/1.8, ISO 100, studio quality, color grading, filmic tone, no noise, extremely detailed).
 negatif: blurry, low quality, low resolution, bad anatomy, distorted face, deformed hands, extra fingers, missing fingers, overexposed, underexposed, cartoon, anime, unrealistic, plastic skin, CGI, 3D render, noise, grain, watermark, text, logo
