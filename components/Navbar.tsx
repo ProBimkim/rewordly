@@ -2,8 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-const tools = [
+const NAV_TOOLS = [
   { href: "/ai-rewriter", label: "Rewriter" },
   { href: "/tools/ai-blog-writer", label: "Blog Writer" },
   { href: "/tools/mcq-solver", label: "MCQ Solver" },
@@ -13,66 +14,101 @@ const tools = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-950/90 backdrop-blur border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-          <Image
-            src="/logo-icon.png"
-            alt="RewordlyAI"
-            width={32}
-            height={32}
-            className="rounded-lg"
-          />
-          <span className="font-bold text-white text-lg">RewordlyAI</span>
-        </Link>
+    <nav style={{
+      borderBottom: "1px solid #ffffff0f",
+      padding: "0 24px",
+      height: 56,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      background: "rgba(7,7,17,0.95)",
+      backdropFilter: "blur(12px)",
+      position: "sticky",
+      top: 0,
+      zIndex: 50,
+    }}>
+      {/* Logo */}
+      <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}>
+        <Image
+          src="/logo-icon.png"
+          alt="RewordlyAI"
+          width={28}
+          height={28}
+          style={{ borderRadius: 6, width: "auto", height: "auto" }}
+        />
+        <span style={{
+          fontWeight: 700,
+          fontSize: 15,
+          background: "linear-gradient(90deg, #818cf8, #c084fc)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}>
+          RewordlyAI
+        </span>
+      </Link>
 
-        {/* Tool Links */}
-        <div className="hidden md:flex items-center gap-1">
-          {tools.map((t) => (
-            <Link
-              key={t.href}
-              href={t.href}
-              className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition-colors ${
-                pathname === t.href
-                  ? "bg-violet-700 text-white"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800"
-              }`}
+      {/* Desktop nav links */}
+      <div style={{ display: "flex", alignItems: "center", gap: 2, flex: 1, justifyContent: "center" }}
+        className="nav-desktop">
+        {NAV_TOOLS.map((t) => {
+          const isActive = pathname === t.href;
+          return (
+            <Link key={t.href} href={t.href} style={{
+              padding: "5px 12px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: isActive ? 600 : 400,
+              textDecoration: "none",
+              color: isActive ? "#a78bfa" : "#6b7280",
+              background: isActive ? "#a78bfa15" : "transparent",
+              border: isActive ? "1px solid #a78bfa30" : "1px solid transparent",
+              transition: "all 0.2s",
+              whiteSpace: "nowrap",
+            }}
+              onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = "#e2e8f0"; }}
+              onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "#6b7280"; }}
             >
               {t.label}
             </Link>
-          ))}
-        </div>
-
-        {/* Right */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <Link href="/about" className="text-sm text-gray-500 hover:text-gray-300 hidden sm:block">
-            About
-          </Link>
-          <Link href="/contact" className="text-sm bg-violet-600 hover:bg-violet-500 text-white px-4 py-1.5 rounded-lg transition-colors">
-            Contact
-          </Link>
-        </div>
+          );
+        })}
       </div>
 
-      {/* Mobile tool scroll */}
-      <div className="md:hidden flex gap-1 px-4 pb-2 overflow-x-auto">
-        {tools.map((t) => (
-          <Link
-            key={t.href}
-            href={t.href}
-            className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
-              pathname === t.href
-                ? "bg-violet-700 text-white"
-                : "text-gray-400 bg-gray-900 hover:text-white"
-            }`}
-          >
-            {t.label}
-          </Link>
-        ))}
+      {/* Right side */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+        <Link href="/about" style={{
+          fontSize: 13,
+          color: "#4b5563",
+          textDecoration: "none",
+          padding: "4px 8px",
+        }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#9ca3af")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "#4b5563")}
+        >
+          About
+        </Link>
+        <Link href="/contact" style={{
+          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+          color: "white",
+          fontSize: 13,
+          fontWeight: 600,
+          textDecoration: "none",
+          padding: "6px 14px",
+          borderRadius: 8,
+          whiteSpace: "nowrap",
+        }}>
+          Contact
+        </Link>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+        }
+      `}</style>
     </nav>
   );
 }

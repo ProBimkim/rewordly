@@ -26,28 +26,48 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-md border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <Image src="/logo-icon.png" alt="RewordlyAI" width={32} height={32} className="rounded-lg" />
-            <span className="font-bold text-white text-lg">RewordlyAI</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-1">
-            {[
-              { href: "/ai-rewriter", label: "Rewriter" },
-              { href: "/tools/mcq-solver", label: "MCQ Solver" },
-              { href: "/tools/image-prompt", label: "Image Gen" },
-              { href: "/tools/ai-agent", label: "AI Agent" },
-            ].map((t) => (
-              <Link key={t.href} href={t.href} className="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
-                {t.label}
-              </Link>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/about" className="text-sm text-gray-500 hover:text-gray-300 hidden sm:block">About</Link>
-            <Link href="/contact" className="text-sm bg-violet-600 hover:bg-violet-500 text-white px-4 py-1.5 rounded-lg transition-colors">Contact</Link>
-          </div>
+      <nav style={{
+        borderBottom: "1px solid #ffffff0f",
+        padding: "0 24px",
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        background: "rgba(7,7,17,0.95)",
+        backdropFilter: "blur(12px)",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+      }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+          <Image src="/logo-icon.png" alt="RewordlyAI" width={28} height={28}
+            style={{ borderRadius: 6, width: "auto", height: "auto" }} />
+          <span style={{
+            fontWeight: 700, fontSize: 15,
+            background: "linear-gradient(90deg, #818cf8, #c084fc)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>RewordlyAI</span>
+        </Link>
+        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+          {[
+            { href: "/ai-rewriter", label: "Rewriter" },
+            { href: "/tools/mcq-solver", label: "MCQ Solver" },
+            { href: "/tools/image-prompt", label: "Image Gen" },
+            { href: "/tools/ai-agent", label: "AI Agent" },
+          ].map((t) => (
+            <Link key={t.href} href={t.href} style={{
+              padding: "5px 10px", borderRadius: 8, fontSize: 13,
+              color: "#6b7280", textDecoration: "none",
+            }}>
+              {t.label}
+            </Link>
+          ))}
+          <Link href="/about" style={{ fontSize: 13, color: "#4b5563", textDecoration: "none", padding: "4px 8px" }}>About</Link>
+          <Link href="/contact" style={{
+            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            color: "white", fontSize: 13, fontWeight: 600,
+            textDecoration: "none", padding: "6px 14px", borderRadius: 8,
+          }}>Contact</Link>
         </div>
       </nav>
 
@@ -127,15 +147,9 @@ export default function HomePage() {
         </Link>
 
         {/* Section header */}
-        <div className="mb-7 flex items-end justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-1">All AI Writing Tools</h2>
-            <p className="text-gray-500 text-sm">Every tool runs on 3 AI agents simultaneously for verified results</p>
-          </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-gray-600 bg-gray-900 border border-gray-800 px-3 py-2 rounded-xl">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            All systems operational
-          </div>
+        <div style={{ marginBottom: 24 }}>
+          <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 6 }}>All AI Writing Tools</h2>
+          <p style={{ color: "#4b5563", fontSize: 14 }}>Every tool runs on 3 AI agents simultaneously for verified results</p>
         </div>
 
         {/* Tool grid */}
