@@ -10,7 +10,7 @@ export interface ToolConfig {
   badge?: string;
   gradientFrom: string;
   gradientTo: string;
-  accentColor: string; // hex color for glow e.g. "#7c3aed"
+  accentColor: string;
   tags: string[];
   placeholder: string;
   inputLabel: string;
@@ -32,7 +32,7 @@ export default function ToolPage({ config }: ToolPageProps) {
   const agentSteps = [
     "🤖 Groq Agent processing...",
     "🧠 Gemini Agent verifying...",
-    "⚡ OpenRouter Agent cross-checking...",
+    "⚡ OpenRouter cross-checking...",
     "🗳️ Selecting best result...",
   ];
 
@@ -71,147 +71,202 @@ export default function ToolPage({ config }: ToolPageProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const ac = config.accentColor;
+
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div style={{ minHeight: "100vh", background: "#0a0a12", color: "#e8e6f0" }}>
       <Navbar />
 
-      {/* Hero — consistent with MCQ solver style */}
-      <div
-        className="relative overflow-hidden border-b border-gray-800"
-        style={{
-          background: `radial-gradient(ellipse at 20% 50%, ${config.accentColor}20 0%, transparent 55%), radial-gradient(ellipse at 80% 50%, ${config.accentColor}10 0%, transparent 55%), #030712`,
-        }}
-      >
-        <div className="relative max-w-4xl mx-auto px-4 py-14 text-center">
-          {config.badge && (
-            <div
-              className="inline-flex items-center gap-2 border text-xs px-3 py-1 rounded-full mb-5"
-              style={{
-                backgroundColor: config.accentColor + "20",
-                borderColor: config.accentColor + "40",
-                color: config.accentColor,
-              }}
-            >
-              🤖 3-Agent Verified · {config.badge}
-            </div>
-          )}
-          <h1
-            className="text-5xl font-bold mb-4"
-            style={{
-              background: `linear-gradient(135deg, ${config.gradientFrom}, ${config.gradientTo})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
+      {/* Hero */}
+      <div className="cyber-grid-bg" style={{
+        position: "relative", overflow: "hidden",
+        borderBottom: "1px solid #2a254520",
+        padding: "48px 20px 40px", textAlign: "center",
+        background: `radial-gradient(ellipse at 50% 0%, ${ac}12 0%, transparent 60%), #0a0a12`,
+      }}>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div className="cyber-badge" style={{
+            marginBottom: 20,
+            background: `${ac}15`, borderColor: `${ac}30`, color: ac,
+          }}>
+            🤖 3-Agent Verified · Groq · Gemini · OpenRouter
+            {config.badge && (
+              <span style={{
+                background: `${ac}20`, border: `1px solid ${ac}40`,
+                color: ac, fontSize: 10, fontWeight: 700,
+                padding: "1px 6px", borderRadius: 6, marginLeft: 4,
+              }}>{config.badge}</span>
+            )}
+          </div>
+
+          <h1 className="hero-title" style={{
+            fontFamily: "'Orbitron', monospace",
+            fontSize: 44, fontWeight: 900, marginBottom: 12,
+            background: `linear-gradient(135deg, #e8e6f0 0%, ${config.gradientFrom} 50%, ${config.gradientTo} 100%)`,
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>
             {config.icon} {config.title}
           </h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto">{config.description}</p>
-          <div className="flex justify-center gap-3 mt-5 flex-wrap text-sm">
-            {["🤖 Groq", "🧠 Gemini", "⚡ OpenRouter", ...config.tags].map((tag) => (
-              <span key={tag} className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-gray-300">
-                {tag}
-              </span>
+
+          <p style={{ color: "#8b85a8", fontSize: 15, maxWidth: 520, margin: "0 auto 20px", lineHeight: 1.7 }}>
+            {config.description}
+          </p>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+            {["Groq Llama 3.3 70B", "Gemini 2.0 Flash", "OpenRouter Free", ...config.tags].map((tag) => (
+              <span key={tag} className="cyber-tag">{tag}</span>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-10">
-        {/* Input card */}
-        <div className="bg-gray-900 rounded-2xl p-6 mb-6 border border-gray-800">
-          <label className="text-sm text-gray-400 font-medium mb-3 block">{config.inputLabel}</label>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={config.placeholder}
-            className="w-full bg-gray-800 rounded-xl p-4 text-white placeholder-gray-500 border border-gray-700 focus:outline-none resize-none h-44 transition-all"
-            style={{
-              borderColor: input.length > 10 ? config.accentColor + "60" : undefined,
-            }}
-          />
-          <div className="flex justify-between items-center mt-3">
-            <span className="text-xs text-gray-500">{input.length} characters</span>
-            <button
-              onClick={handleSubmit}
-              disabled={loading || input.trim().length < 5}
-              className="px-8 py-3 rounded-xl font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed text-white"
-              style={{
-                background:
-                  loading || input.trim().length < 5
-                    ? "#374151"
-                    : `linear-gradient(135deg, ${config.gradientFrom}, ${config.gradientTo})`,
-              }}
-            >
-              {loading ? "Processing..." : (config.buttonLabel ?? `Run ${config.title} →`)}
-            </button>
-          </div>
-        </div>
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "32px 20px" }}>
 
         {/* Agent progress */}
         {loading && (
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-5 mb-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div
-                className="animate-spin w-5 h-5 border-2 border-t-transparent rounded-full flex-shrink-0"
-                style={{ borderColor: config.accentColor, borderTopColor: "transparent" }}
-              />
-              <span className="font-medium" style={{ color: config.accentColor }}>
+          <div style={{
+            background: "#13111f", border: `1px solid ${ac}30`,
+            borderRadius: 14, padding: "14px 18px", marginBottom: 16,
+            display: "flex", alignItems: "center", gap: 12,
+          }}>
+            <div style={{
+              width: 18, height: 18, borderRadius: "50%",
+              border: `2px solid ${ac}`, borderTopColor: "transparent",
+              animation: "spin 0.7s linear infinite", flexShrink: 0,
+            }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ color: ac, fontSize: 13, fontWeight: 600, marginBottom: 8 }}>
                 {agentSteps[agentStep]}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              {["Groq", "Gemini", "OpenRouter"].map((name, i) => (
-                <div key={name} className="flex-1">
-                  <div className="text-xs text-gray-600 mb-1">{name}</div>
-                  <div
-                    className="h-1.5 rounded-full transition-all duration-700"
-                    style={{
-                      backgroundColor:
-                        agentStep > i ? config.accentColor : agentStep === i ? config.accentColor + "60" : "#1f2937",
-                    }}
-                  />
-                </div>
-              ))}
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                {[
+                  { name: "Groq", color: "#a855f7" },
+                  { name: "Gemini", color: "#00e5ff" },
+                  { name: "OpenRouter", color: "#39ff14" },
+                ].map((a, i) => (
+                  <div key={a.name} style={{ flex: 1 }}>
+                    <div style={{ fontSize: 10, color: a.color, marginBottom: 3 }}>{a.name}</div>
+                    <div style={{
+                      height: 3, borderRadius: 2, transition: "all 0.4s",
+                      background: agentStep > i ? a.color : agentStep === i ? a.color + "60" : "#1e1b35",
+                      boxShadow: agentStep > i ? `0 0 6px ${a.color}60` : "none",
+                    }} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
 
+        {/* Input */}
+        <div style={{
+          background: "#13111f",
+          border: `1px solid ${loading || input.length > 0 ? ac + "25" : "#2a254530"}`,
+          borderRadius: 16, overflow: "hidden", marginBottom: 12,
+          transition: "border-color 0.3s",
+        }}>
+          <div style={{
+            padding: "10px 16px", borderBottom: "1px solid #2a254520",
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+          }}>
+            <span style={{
+              fontSize: 11, color: "#5a5477",
+              textTransform: "uppercase", letterSpacing: "0.1em",
+              fontWeight: 600, fontFamily: "'Orbitron', monospace",
+            }}>{config.inputLabel}</span>
+            <span style={{ fontSize: 11, color: input.length > 9000 ? "#ff1744" : "#5a5477" }}>
+              {input.length} chars
+            </span>
+          </div>
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={config.placeholder}
+            className="cyber-textarea"
+            style={{ minHeight: 180 }}
+          />
+        </div>
+
+        {/* Submit */}
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
+          <button
+            onClick={handleSubmit}
+            disabled={loading || input.trim().length < 5}
+            className="cyber-btn"
+            style={{
+              background: loading || input.trim().length < 5
+                ? "#1e1b35"
+                : `linear-gradient(135deg, ${config.gradientFrom}, ${config.gradientTo})`,
+              color: loading || input.trim().length < 5 ? "#5a5477" : "white",
+              padding: "13px 32px",
+              boxShadow: loading || input.trim().length < 5 ? "none" : `0 0 20px ${ac}30`,
+            }}
+          >
+            {loading ? "Processing..." : (config.buttonLabel ?? `Run ${config.title} →`)}
+          </button>
+        </div>
+
         {/* Error */}
         {error && (
-          <div className="bg-red-950 border border-red-800 rounded-2xl p-5 mb-6 text-red-300 flex items-start gap-3">
-            <span className="flex-shrink-0">⚠️</span>
-            <span>{error}</span>
+          <div style={{
+            background: "#ff174410", border: "1px solid #ff174430",
+            borderRadius: 14, padding: "14px 18px", marginBottom: 16,
+            color: "#ff6b6b", fontSize: 14,
+            display: "flex", gap: 8, alignItems: "center",
+          }}>
+            <span>⚠️</span><span>{error}</span>
           </div>
         )}
 
         {/* Result */}
         {result && (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-200">✅ Result</span>
-                <span className="text-xs text-gray-600">· 3-agent verified</span>
+          <div style={{
+            background: "#13111f", border: `1px solid ${ac}25`,
+            borderRadius: 16, overflow: "hidden",
+          }}>
+            <div style={{
+              height: 2,
+              background: `linear-gradient(90deg, transparent, ${config.gradientFrom}, ${config.gradientTo}, transparent)`,
+            }} />
+            <div style={{
+              padding: "10px 16px", borderBottom: "1px solid #2a254520",
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{
+                  fontSize: 11, color: "#5a5477",
+                  textTransform: "uppercase", letterSpacing: "0.1em",
+                  fontWeight: 600, fontFamily: "'Orbitron', monospace",
+                }}>Result</span>
+                <span style={{
+                  background: `${ac}15`, border: `1px solid ${ac}30`,
+                  color: ac, fontSize: 10, fontWeight: 700,
+                  padding: "1px 8px", borderRadius: 6,
+                }}>✓ 3-agent verified</span>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => { setResult(""); setInput(""); }}
-                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-400 px-3 py-1.5 rounded-lg transition-colors"
-                >
-                  🔄 Reset
-                </button>
-                <button
-                  onClick={handleCopy}
-                  className="text-xs px-3 py-1.5 rounded-lg transition-colors text-white"
-                  style={{ backgroundColor: copied ? "#065f46" : config.accentColor + "aa" }}
-                >
-                  {copied ? "✅ Copied!" : "📋 Copy"}
+              <div style={{ display: "flex", gap: 6 }}>
+                <button onClick={() => { setResult(""); setInput(""); }}
+                  style={{
+                    background: "none", border: "1px solid #2a2545",
+                    color: "#5a5477", borderRadius: 8,
+                    padding: "4px 10px", fontSize: 12, cursor: "pointer",
+                  }}>🔄 Reset</button>
+                <button onClick={handleCopy}
+                  style={{
+                    background: copied ? "#39ff1410" : "none",
+                    border: `1px solid ${copied ? "#39ff14" : "#2a2545"}`,
+                    color: copied ? "#39ff14" : "#8b85a8",
+                    borderRadius: 8, padding: "4px 10px",
+                    fontSize: 12, cursor: "pointer", transition: "all 0.2s",
+                  }}>
+                  {copied ? "✓ Copied!" : "📋 Copy"}
                 </button>
               </div>
             </div>
-            <div className="p-5">
-              <div className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">{result}</div>
-            </div>
+            <div style={{
+              padding: "18px 16px", fontSize: 14,
+              lineHeight: 1.8, color: "#e8e6f0", whiteSpace: "pre-wrap",
+            }}>{result}</div>
           </div>
         )}
       </div>

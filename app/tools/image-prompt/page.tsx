@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 
 interface ImageData {
   prompt: string;
-  imageUrl: string; // proxy URL
+  imageUrl: string;
   seed: number;
 }
 
@@ -35,7 +35,6 @@ export default function ImageGeneratorPage() {
     setLoadingStep("🤖 AI crafting your prompt...");
 
     try {
-      // Step 1: Get enhanced prompt from AI
       const res = await fetch("/api/tools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -49,15 +48,11 @@ export default function ImageGeneratorPage() {
       }
 
       const prompt = data.result as string;
-      const seed = data.seed as number ?? Math.floor(Math.random() * 999999);
+      const seed = (data.seed as number) ?? Math.floor(Math.random() * 999999);
 
       setLoadingStep("🎨 Generating your image...");
-
-      // Step 2: Use proxy URL — image loads via our server, not browser directly
       const proxyUrl = buildProxyUrl(prompt, seed);
-
       setImageData({ prompt, imageUrl: proxyUrl, seed });
-
     } catch {
       setError("Connection failed. Please try again.");
     } finally {
@@ -81,153 +76,211 @@ export default function ImageGeneratorPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `rewordlyai-${imageData.seed}.jpg`;
+      a.download = `bantugwehai-${imageData.seed}.jpg`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      // fallback: open in new tab
       window.open(imageData.imageUrl, "_blank");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div style={{ minHeight: "100vh", background: "#0a0a12", color: "#e8e6f0" }}>
       <Navbar />
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-pink-950/40 via-gray-950 to-violet-950/40 border-b border-gray-800">
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 30% 50%, #ec4899 0%, transparent 50%), radial-gradient(circle at 70% 50%, #8b5cf6 0%, transparent 50%)",
-          }}
-        />
-        <div className="relative max-w-4xl mx-auto px-4 py-14 text-center">
-          <div className="inline-flex items-center gap-2 bg-pink-900/30 border border-pink-700/40 text-pink-300 text-xs px-3 py-1 rounded-full mb-5">
+      <div className="cyber-grid-bg" style={{
+        position: "relative", overflow: "hidden",
+        borderBottom: "1px solid #2a254520",
+        background: "radial-gradient(ellipse at 30% 50%, #e040fb10 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, #a855f710 0%, transparent 50%), #0a0a12",
+      }}>
+        <div style={{
+          position: "relative", zIndex: 1,
+          maxWidth: 800, margin: "0 auto",
+          padding: "48px 20px", textAlign: "center",
+        }}>
+          <div className="cyber-badge" style={{
+            marginBottom: 20,
+            background: "#e040fb15", borderColor: "#e040fb30", color: "#e040fb",
+          }}>
             ✨ Powered by Flux AI via Pollinations
           </div>
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-pink-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
+          <h1 className="hero-title" style={{
+            fontFamily: "'Orbitron', monospace",
+            fontSize: 44, fontWeight: 900, marginBottom: 16,
+            background: "linear-gradient(135deg, #e040fb, #a855f7, #00e5ff)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>
             AI Image Generator
           </h1>
-          <p className="text-gray-400 text-lg max-w-xl mx-auto">
+          <p style={{ color: "#8b85a8", fontSize: 16, maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
             Describe in any language — AI crafts the perfect prompt and generates stunning HD images
           </p>
-          <div className="flex justify-center gap-3 mt-5 flex-wrap text-sm">
+          <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
             {[["🎨", "Flux AI Model"], ["🖼️", "1024×1024 HD"], ["🌐", "Any Language"], ["⚡", "Free Forever"]].map(
               ([icon, label]) => (
-                <span key={label} className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-gray-300">
-                  {icon} {label}
-                </span>
+                <span key={label} className="cyber-tag">{icon} {label}</span>
               )
             )}
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-10">
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px" }}>
         {/* Input */}
-        <div className="bg-gray-900 rounded-2xl p-6 mb-6 border border-gray-800">
-          <label className="text-sm text-gray-400 font-medium mb-3 block">
+        <div style={{
+          background: "#13111f", borderRadius: 16,
+          border: "1px solid #2a2545", padding: "24px",
+          marginBottom: 20,
+        }}>
+          <label style={{ fontSize: 13, color: "#8b85a8", fontWeight: 500, display: "block", marginBottom: 12 }}>
             🖊️ Describe your image (Indonesian, English, or any language)
           </label>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Contoh: Kucing lucu memakai topi penyihir di perpustakaan kuno..."
-            className="w-full bg-gray-800 rounded-xl p-4 text-white placeholder-gray-500 border border-gray-700 focus:border-pink-500 focus:outline-none resize-none h-32 transition-colors"
+            className="cyber-textarea"
+            style={{
+              background: "#0d0b1a", border: "1px solid #2a2545",
+              borderRadius: 12, height: 120,
+            }}
           />
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
             {examples.map((ex) => (
-              <button
-                key={ex}
-                onClick={() => setInput(ex)}
-                className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-full border border-gray-700 transition-all"
-              >
+              <button key={ex} onClick={() => setInput(ex)}
+                style={{
+                  fontSize: 12, background: "#0d0b1a",
+                  border: "1px solid #2a2545",
+                  color: "#8b85a8", padding: "6px 12px",
+                  borderRadius: 20, cursor: "pointer",
+                  transition: "all 0.2s",
+                }}>
                 {ex}
               </button>
             ))}
           </div>
 
-          <div className="flex justify-between items-center mt-4">
-            <span className="text-xs text-gray-500">{input.length} / 500 chars</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
+            <span style={{ fontSize: 12, color: "#5a5477" }}>{input.length} / 500 chars</span>
             <button
               onClick={handleGenerate}
               disabled={loading || !input.trim()}
-              className="bg-gradient-to-r from-pink-600 to-violet-600 hover:from-pink-500 hover:to-violet-500 disabled:from-gray-700 disabled:to-gray-700 disabled:cursor-not-allowed px-8 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-pink-900/20"
+              className="cyber-btn"
+              style={{
+                background: loading || !input.trim()
+                  ? "#1e1b35"
+                  : "linear-gradient(135deg, #e040fb, #a855f7)",
+                padding: "12px 28px",
+              }}
             >
               {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full inline-block" />
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{
+                    width: 16, height: 16, borderRadius: "50%",
+                    border: "2px solid white", borderTopColor: "transparent",
+                    animation: "spin 0.7s linear infinite", display: "block",
+                  }} />
                   {loadingStep || "Generating..."}
                 </span>
-              ) : (
-                "✨ Generate Image"
-              )}
+              ) : "✨ Generate Image"}
             </button>
           </div>
         </div>
 
         {/* Error */}
         {error && (
-          <div className="bg-red-950 border border-red-800 rounded-2xl p-5 mb-6 text-red-300 flex items-start gap-3">
-            <span className="text-xl flex-shrink-0">⚠️</span>
+          <div style={{
+            background: "#ff174410", border: "1px solid #ff174430",
+            borderRadius: 16, padding: "16px 20px",
+            marginBottom: 20, color: "#ff6b6b",
+            display: "flex", alignItems: "center", gap: 10,
+          }}>
+            <span style={{ fontSize: 18 }}>⚠️</span>
             <span>{error}</span>
           </div>
         )}
 
         {/* Result */}
         {imageData && (
-          <div className="space-y-4">
-            <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{
+              background: "#13111f", borderRadius: 16,
+              border: "1px solid #e040fb25", overflow: "hidden",
+            }}>
               {/* Header */}
-              <div className="p-4 border-b border-gray-800 flex justify-between items-center">
-                <span className="text-sm font-semibold text-gray-200">🖼️ Generated Image</span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleRegenerate}
-                    className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-all border border-gray-700"
-                  >
-                    🔄 New Variation
-                  </button>
-                  <button
-                    onClick={handleDownload}
-                    className="text-xs bg-pink-700 hover:bg-pink-600 text-white px-3 py-1.5 rounded-lg transition-all"
-                  >
-                    ⬇️ Download
-                  </button>
+              <div style={{
+                padding: "14px 20px",
+                borderBottom: "1px solid #2a254520",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                flexWrap: "wrap", gap: 8,
+              }}>
+                <span style={{
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: 13, fontWeight: 600, color: "#e8e6f0",
+                }}>🖼️ Generated Image</span>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={handleRegenerate} style={{
+                    fontSize: 12, background: "#0d0b1a",
+                    border: "1px solid #2a2545",
+                    color: "#8b85a8", padding: "6px 14px",
+                    borderRadius: 10, cursor: "pointer",
+                  }}>🔄 New Variation</button>
+                  <button onClick={handleDownload} style={{
+                    fontSize: 12,
+                    background: "linear-gradient(135deg, #e040fb, #a855f7)",
+                    border: "none", color: "white",
+                    padding: "6px 14px", borderRadius: 10,
+                    cursor: "pointer",
+                    boxShadow: "0 0 10px #e040fb30",
+                  }}>⬇️ Download</button>
                 </div>
               </div>
 
-              {/* Image area */}
-              <div className="relative bg-gray-950 min-h-72 flex items-center justify-center">
-                {/* Loading spinner — show while image not loaded */}
+              {/* Image */}
+              <div style={{
+                position: "relative", background: "#0a0a12",
+                minHeight: 300, display: "flex",
+                alignItems: "center", justifyContent: "center",
+              }}>
                 {!imgLoaded && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-gray-950">
-                    <div className="relative w-16 h-16 mb-4">
-                      <div className="animate-spin absolute inset-0 rounded-full border-4 border-pink-500 border-t-transparent" />
-                      <div
-                        className="animate-spin absolute inset-2 rounded-full border-4 border-violet-500 border-b-transparent"
-                        style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
-                      />
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center",
+                    zIndex: 10, background: "#0a0a12",
+                  }}>
+                    <div style={{ position: "relative", width: 64, height: 64, marginBottom: 16 }}>
+                      <div style={{
+                        position: "absolute", inset: 0, borderRadius: "50%",
+                        border: "3px solid #e040fb", borderTopColor: "transparent",
+                        animation: "spin 0.8s linear infinite",
+                      }} />
+                      <div style={{
+                        position: "absolute", inset: 8, borderRadius: "50%",
+                        border: "3px solid #a855f7", borderBottomColor: "transparent",
+                        animation: "spin 0.8s linear infinite",
+                        animationDirection: "reverse",
+                      }} />
                     </div>
-                    <p className="text-gray-300 font-medium">Rendering image...</p>
-                    <p className="text-gray-500 text-sm mt-1">Usually 10-40 seconds</p>
+                    <p style={{ color: "#e8e6f0", fontWeight: 500, fontSize: 14 }}>Rendering image...</p>
+                    <p style={{ color: "#5a5477", fontSize: 12, marginTop: 4 }}>Usually 10-40 seconds</p>
                   </div>
                 )}
-
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   key={imageData.imageUrl}
                   src={imageData.imageUrl}
                   alt="AI Generated artwork"
-                  className="w-full"
-                  style={{ display: imgLoaded ? "block" : "none" }}
+                  style={{
+                    width: "100%", display: imgLoaded ? "block" : "none",
+                    borderRadius: 0,
+                  }}
                   onLoad={() => setImgLoaded(true)}
                   onError={() => {
-                    setImgLoaded(true); // stop spinner
-                    setError("Image generation timed out. Pollinations is busy — please try again in a moment.");
+                    setImgLoaded(true);
+                    setError("Image generation timed out. Pollinations is busy — please try again.");
                     setImageData(null);
                   }}
                 />
@@ -235,20 +288,32 @@ export default function ImageGeneratorPage() {
             </div>
 
             {/* Prompt display */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <div style={{
+              background: "#13111f", border: "1px solid #2a254520",
+              borderRadius: 16, padding: "20px",
+            }}>
+              <div style={{
+                fontSize: 11, color: "#5a5477",
+                textTransform: "uppercase", letterSpacing: "0.1em",
+                marginBottom: 8, fontFamily: "'Orbitron', monospace",
+                display: "flex", alignItems: "center", gap: 6,
+              }}>
                 <span>🤖</span> AI-Enhanced Prompt (English)
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed">{imageData.prompt}</p>
+              <p style={{ color: "#8b85a8", fontSize: 13, lineHeight: 1.7 }}>{imageData.prompt}</p>
               <button
                 onClick={() => navigator.clipboard.writeText(imageData.prompt)}
-                className="mt-3 text-xs text-pink-400 hover:text-pink-300 transition-colors"
-              >
-                📋 Copy prompt
-              </button>
+                style={{
+                  marginTop: 10, background: "none",
+                  border: "1px solid #2a2545",
+                  color: "#e040fb", fontSize: 12,
+                  padding: "4px 12px", borderRadius: 8,
+                  cursor: "pointer", transition: "all 0.2s",
+                }}
+              >📋 Copy prompt</button>
             </div>
 
-            <p className="text-xs text-gray-600 text-center">
+            <p style={{ fontSize: 12, color: "#5a5477", textAlign: "center" }}>
               Seed: {imageData.seed} · Model: Flux · via Pollinations AI (free & open source)
             </p>
           </div>
@@ -256,16 +321,23 @@ export default function ImageGeneratorPage() {
 
         {/* How it works */}
         {!imageData && !loading && (
-          <div className="mt-6 grid grid-cols-3 gap-4">
+          <div className="grid-3col" style={{ marginTop: 24 }}>
             {[
               { icon: "✍️", title: "1. Describe", desc: "Any language, any style" },
               { icon: "🤖", title: "2. AI Enhances", desc: "Optimized English prompt" },
               { icon: "🖼️", title: "3. Get Image", desc: "HD image in 10-40 seconds" },
             ].map((s) => (
-              <div key={s.title} className="bg-gray-900/50 rounded-xl p-4 border border-gray-800 text-center">
-                <div className="text-3xl mb-2">{s.icon}</div>
-                <div className="font-semibold text-sm mb-1">{s.title}</div>
-                <div className="text-xs text-gray-500">{s.desc}</div>
+              <div key={s.title} style={{
+                background: "#13111f", borderRadius: 14,
+                padding: "20px 16px", border: "1px solid #2a254520",
+                textAlign: "center",
+              }}>
+                <div style={{ fontSize: 28, marginBottom: 8 }}>{s.icon}</div>
+                <div style={{
+                  fontWeight: 700, fontSize: 14, marginBottom: 4,
+                  fontFamily: "'Orbitron', monospace", color: "#e8e6f0",
+                }}>{s.title}</div>
+                <div style={{ fontSize: 12, color: "#5a5477" }}>{s.desc}</div>
               </div>
             ))}
           </div>

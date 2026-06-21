@@ -8,66 +8,134 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div style={{ minHeight: "100vh", background: "#0a0a12", color: "#e8e6f0" }}>
       <Navbar />
-      <div className="max-w-2xl mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-3">Contact Us</h1>
-        <p className="text-gray-400 mb-10">
-          Have a question, feedback, or business inquiry? We&apos;d love to hear from you.
-        </p>
 
+      <div className="cyber-grid-bg" style={{
+        position: "relative", overflow: "hidden",
+        borderBottom: "1px solid #2a254520",
+        padding: "48px 20px 40px", textAlign: "center",
+        background: "radial-gradient(ellipse at 50% 0%, #7c3aed10 0%, transparent 60%), #0a0a12",
+      }}>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <h1 style={{
+            fontFamily: "'Orbitron', monospace",
+            fontSize: 40, fontWeight: 900, marginBottom: 8,
+            background: "linear-gradient(135deg, #e8e6f0, #a855f7)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>
+            Contact Us
+          </h1>
+          <p style={{ color: "#8b85a8", fontSize: 16 }}>
+            Have a question, feedback, or business inquiry? We&apos;d love to hear from you.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 20px" }}>
         {submitted ? (
-          <div className="bg-green-950 border border-green-700 rounded-2xl p-8 text-center">
-            <div className="text-5xl mb-4">✅</div>
-            <h2 className="text-xl font-semibold mb-2">Message Sent!</h2>
-            <p className="text-gray-400 mb-6">Thank you! We&apos;ll get back to you within 1-2 business days.</p>
-            <Link href="/" className="inline-block bg-violet-600 hover:bg-violet-500 px-6 py-3 rounded-xl text-sm font-medium transition-colors">
+          <div style={{
+            background: "#39ff1408", border: "1px solid #39ff1425",
+            borderRadius: 20, padding: "40px 32px", textAlign: "center",
+            position: "relative", overflow: "hidden",
+          }}>
+            <div style={{
+              position: "absolute", top: 0, left: 0, right: 0, height: 2,
+              background: "linear-gradient(90deg, transparent, #39ff14, transparent)",
+            }} />
+            <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+            <h2 style={{
+              fontFamily: "'Orbitron', monospace",
+              fontSize: 20, fontWeight: 700, marginBottom: 8,
+            }}>Message Sent!</h2>
+            <p style={{ color: "#8b85a8", marginBottom: 24 }}>
+              Thank you! We&apos;ll get back to you within 1-2 business days.
+            </p>
+            <Link href="/" className="cyber-btn" style={{
+              textDecoration: "none", display: "inline-flex",
+              padding: "12px 24px",
+            }}>
               Back to Home
             </Link>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Your Name</label>
-              <input type="text" value={form.name}
+              <label style={{
+                fontSize: 13, color: "#8b85a8", marginBottom: 8, display: "block",
+                fontFamily: "'Orbitron', monospace", fontWeight: 500,
+              }}>Your Name</label>
+              <input
+                type="text"
+                value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="John Doe"
-                className="w-full bg-gray-900 border border-gray-700 focus:border-violet-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none" />
+                className="cyber-input"
+              />
             </div>
+
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Email Address</label>
-              <input type="email" value={form.email}
+              <label style={{
+                fontSize: 13, color: "#8b85a8", marginBottom: 8, display: "block",
+                fontFamily: "'Orbitron', monospace", fontWeight: 500,
+              }}>Email Address</label>
+              <input
+                type="email"
+                value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="you@email.com"
-                className="w-full bg-gray-900 border border-gray-700 focus:border-violet-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none" />
+                className="cyber-input"
+              />
             </div>
+
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Message</label>
-              <textarea value={form.message}
+              <label style={{
+                fontSize: 13, color: "#8b85a8", marginBottom: 8, display: "block",
+                fontFamily: "'Orbitron', monospace", fontWeight: 500,
+              }}>Message</label>
+              <textarea
+                value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 placeholder="Tell us how we can help..."
                 rows={6}
-                className="w-full bg-gray-900 border border-gray-700 focus:border-violet-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none resize-none" />
+                className="cyber-input"
+                style={{ resize: "none", lineHeight: 1.7 }}
+              />
             </div>
+
             <button
               onClick={() => setSubmitted(true)}
               disabled={!form.name || !form.email || !form.message}
-              className="w-full bg-violet-600 hover:bg-violet-500 disabled:bg-gray-700 disabled:cursor-not-allowed py-3 rounded-xl font-semibold transition-colors">
+              className="cyber-btn"
+              style={{
+                width: "100%", justifyContent: "center",
+                padding: "14px",
+                background: !form.name || !form.email || !form.message
+                  ? "#1e1b35"
+                  : "linear-gradient(135deg, #7c3aed, #a855f7)",
+                color: !form.name || !form.email || !form.message
+                  ? "#5a5477" : "white",
+              }}
+            >
               Send Message →
             </button>
           </div>
         )}
 
-        <div className="mt-12 grid grid-cols-3 gap-4 text-center text-sm">
-          {([
-            { icon: "📧", label: "Email", value: "support@rewordlyai.com" },
-            { icon: "🌐", label: "Website", value: "rewordly-ai.vercel.app" },
+        <div className="grid-contact" style={{ marginTop: 40 }}>
+          {[
+            { icon: "📧", label: "Email", value: "support@bantugwehai.com" },
+            { icon: "🌐", label: "Website", value: "bantugweh-ai.vercel.app" },
             { icon: "🕐", label: "Response", value: "1-2 business days" },
-          ] as { icon: string; label: string; value: string }[]).map((item) => (
-            <div key={item.label} className="bg-gray-900 rounded-xl p-4 border border-gray-800">
-              <div className="text-2xl mb-1">{item.icon}</div>
-              <div className="text-gray-500 text-xs">{item.label}</div>
-              <div className="text-gray-300 text-xs mt-0.5 break-all">{item.value}</div>
+          ].map((item) => (
+            <div key={item.label} style={{
+              background: "#13111f", borderRadius: 14,
+              padding: "16px", border: "1px solid #2a254520",
+              textAlign: "center",
+            }}>
+              <div style={{ fontSize: 24, marginBottom: 6 }}>{item.icon}</div>
+              <div style={{ fontSize: 11, color: "#5a5477", marginBottom: 2 }}>{item.label}</div>
+              <div style={{ fontSize: 12, color: "#8b85a8", wordBreak: "break-all" }}>{item.value}</div>
             </div>
           ))}
         </div>

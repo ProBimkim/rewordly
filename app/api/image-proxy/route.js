@@ -1,5 +1,5 @@
 // app/api/image-proxy/route.js
-// Proxy untuk fetch gambar dari Pollinations agar tidak kena CORS/timeout di browser
+// Proxy for fetching images from Pollinations to avoid CORS/timeout in browser
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -13,12 +13,17 @@ export async function GET(req) {
   const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux`;
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
     const imageRes = await fetch(pollinationsUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; RewordlyAI/1.0)",
+        "User-Agent": "Mozilla/5.0 (compatible; BantuGwehAI/1.0)",
       },
-      // Server-side fetch tidak kena CORS
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!imageRes.ok) {
       throw new Error(`Pollinations returned ${imageRes.status}`);
@@ -37,6 +42,10 @@ export async function GET(req) {
     });
   } catch (err) {
     console.error("Image proxy error:", err);
-    return new Response("Failed to fetch image", { status: 502 });
+    const isTimeout = err.name === "AbortError";
+    return new Response(
+      isTimeout ? "Image generation timed out" : "Failed to fetch image",
+      { status: isTimeout ? 504 : 502 }
+    );
   }
 }
