@@ -156,33 +156,37 @@ async function callGroq(text, prompt, temp) {
 }
 
 async function callGemini(text, prompt, temp) {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM + "\n\n" + prompt }] },
-          contents: [{ parts: [{ text }] }],
-          generationConfig: { temperature: temp, maxOutputTokens: 2048 },
-        }),
+  const fullSystem = SYSTEM + "\n\n" + prompt;
+  // Attempt 1: Call Google's Gemini API directly (if key is valid)
+  if (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes("YOUR_")) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: fullSystem }] },
+            contents: [{ parts: [{ text }] }],
+            generationConfig: { temperature: temp, maxOutputTokens: 2048 },
+          }),
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        const t = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+        if (t) return t;
+      } else {
+        console.warn(`Direct Gemini API failed with status ${res.status}, falling back to OpenRouter...`);
       }
-    );
-    if (res.status === 429) {
-      if (attempt === 0) { await sleep(3000); continue; }
-      throw new Error("Gemini rate limited");
+    } catch (err) {
+      console.warn("Direct Gemini API error:", err.message, "falling back to OpenRouter...");
     }
-    if (!res.ok) throw new Error(`Gemini ${res.status}`);
-    const data = await res.json();
-    const t = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-    if (!t) throw new Error("Gemini empty");
-    return t;
   }
-}
 
-async function callOpenRouter(text, prompt, temp) {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  // Attempt 2: Fallback to calling Gemini via OpenRouter
+  console.log("Calling Gemini via OpenRouter fallback...");
+  try {
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -192,25 +196,84 @@ async function callOpenRouter(text, prompt, temp) {
         "X-Title": "BantuGwehAI",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
+        model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: SYSTEM + "\n\n" + prompt },
-          { role: "user", content: text },
+          { role: "system", content: fullSystem },
+          { role: "user", content: text }
         ],
         max_tokens: 2048,
         temperature: temp,
       }),
     });
-    if (res.status === 429) {
-      if (attempt < 2) { await sleep((attempt + 1) * 2000); continue; }
-      throw new Error("OpenRouter rate limited");
-    }
-    if (!res.ok) throw new Error(`OpenRouter ${res.status}`);
+    if (!res.ok) throw new Error(`OpenRouter Gemini ${res.status}`);
     const data = await res.json();
-    const t = data?.choices?.[0]?.message?.content?.trim();
-    if (!t) throw new Error("OpenRouter empty");
-    return t;
+    const content = data?.choices?.[0]?.message?.content?.trim();
+    if (!content) throw new Error("OpenRouter Gemini empty response");
+    return content;
+  } catch (err) {
+    throw new Error(`Gemini failed (direct & OpenRouter fallback): ${err.message}`);
   }
+}
+
+async function callOpenRouter(text, prompt, temp) {
+  const fullSystem = SYSTEM + "\n\n" + prompt;
+  const messages = [
+    { role: "system", content: fullSystem },
+    { role: "user", content: text },
+  ];
+
+  const models = [
+    "meta-llama/llama-3.3-70b-instruct:free", // try free first
+    "meta-llama/llama-3.3-70b-instruct",      // fallback to cheap paid
+    "meta-llama/llama-3.2-3b-instruct:free",  // fallback to other free
+  ];
+
+  let lastError = null;
+
+  for (const model of models) {
+    try {
+      console.log(`Calling OpenRouter model: ${model}`);
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://bantugweh-ai.vercel.app",
+          "X-Title": "BantuGwehAI",
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: 2048,
+          temperature: temp,
+        }),
+      });
+
+      if (res.status === 429) {
+        console.warn(`OpenRouter model ${model} rate limited, trying next fallback...`);
+        continue;
+      }
+
+      if (!res.ok) {
+        console.warn(`OpenRouter model ${model} failed with status ${res.status}`);
+        continue;
+      }
+
+      const data = await res.json();
+      const content = data?.choices?.[0]?.message?.content?.trim();
+      if (!content) {
+        console.warn(`OpenRouter model ${model} returned empty content`);
+        continue;
+      }
+
+      return content;
+    } catch (err) {
+      lastError = err;
+      console.warn(`OpenRouter model ${model} error: ${err.message}`);
+    }
+  }
+
+  throw new Error(`OpenRouter failed all model attempts. Last error: ${lastError?.message}`);
 }
 
 // ============================================================
